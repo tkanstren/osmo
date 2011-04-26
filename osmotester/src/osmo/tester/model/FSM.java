@@ -1,5 +1,6 @@
 package osmo.tester.model;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,13 +26,32 @@ public class FSM {
   public void check() {
     String errors = "";
     for (FSMTransition transition : transitions.values()) {
-      if (transition.getTransition() == null) {
+      Method method = transition.getTransition();
+      if (method == null) {
         errors += "Guard without transition:"+transition.getName()+"\n";
+      } else if (method.getParameterTypes().length > 0) {
+        int p = method.getParameterTypes().length;
+        errors += "Transition methods are not allowed to have parameters: \""+method.getName()+"()\" has "+p+" parameters.\n";
       }
+      errors = checkGuards(transition, errors);
     }
     if (errors.length() > 0) {
       throw new IllegalStateException("Invalid FSM:\n"+errors);
     }
+  }
+
+  private String checkGuards(FSMTransition transition, String errors) {
+    for (Method guard : transition.getGuards()) {
+      Class<?> type = guard.getReturnType();
+      if (!(type.equals(boolean.class))) {
+        errors += "Invalid return type for guard (\""+guard.getName()+"()\"):"+type+".\n";
+      }
+      Class<?>[] parameterTypes = guard.getParameterTypes();
+      if (parameterTypes.length > 0) {
+        errors += "Guard methods are not allowed to have parameters: \""+guard.getName()+"()\" has "+parameterTypes.length+" parameters.\n";
+      }
+    }
+    return errors;
   }
 
   public FSMTransition getTransition(String name) {
