@@ -11,6 +11,15 @@ import java.util.Map;
  */
 public class FSM {
   private Map<String, FSMTransition> transitions = new HashMap<String, FSMTransition>();
+  private final Object model;
+
+  public FSM(Object model) {
+    this.model = model;
+  }
+
+  public Object getModel() {
+    return model;
+  }
 
   public FSMTransition createTransition(String name) {
     System.out.println("Creating transition:"+name);
@@ -56,5 +65,9 @@ public class FSM {
 
   public FSMTransition getTransition(String name) {
     return transitions.get(name);
+  }
+
+  public Collection<FSMTransition> getTransitions() {
+    return transitions.values();
   }
 }
