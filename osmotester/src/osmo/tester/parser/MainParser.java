@@ -15,7 +15,12 @@ import java.util.Collection;
  */
 public class MainParser {
   public FSM parse(Class clazz) {
-    FSM fsm = new FSM();
+    FSM fsm = null;
+    try {
+      fsm = new FSM(clazz.newInstance());
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to create model object. Did you provide a no-arg constructor?:", e);
+    }
     Method[] methods = clazz.getMethods();
     for (Method method : methods) {
       System.out.println("m:"+method);
