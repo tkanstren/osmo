@@ -1,0 +1,3 @@
+JDK logging
+before/after contract checking
+tests for execution

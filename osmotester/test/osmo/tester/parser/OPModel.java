@@ -1,27 +1,40 @@
 package osmo.tester.parser;
 
+import osmo.tester.OSMOTester;
 import osmo.tester.annotation.After;
+import osmo.tester.annotation.AfterSuite;
 import osmo.tester.annotation.Before;
+import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.annotation.Guard;
 import osmo.tester.annotation.Transition;
-import osmo.tester.generator.RandomGenerator;
-import osmo.tester.model.FSM;
 
 /**
  * @author Teemu Kanstren
  */
 public class OPModel {
   private int counter = 0;
+  private int testCount = 1;
+
+  @BeforeSuite
+  public void first() {
+    System.out.println("first");
+  }
+
+  @AfterSuite
+  public void last() {
+    System.out.println("last");
+  }
 
   @Before
   public void start() {
     counter = 0;
-    System.out.println("Starting new test case...");
+    System.out.println("Starting new test case "+testCount);
+    testCount++;
   }
 
   @After
   public void end() {
-    System.out.println("The End\n");
+    System.out.println("Test case ended\n");
   }
 
   @Guard("start")
@@ -37,7 +50,7 @@ public class OPModel {
 
   @Guard("decrease")
   public boolean decreaseGuard() {
-    return counter > 0;
+    return counter > 1;
   }
 
   @Transition("decrease")
@@ -58,9 +71,8 @@ public class OPModel {
   }
 
   public static void main(String[] args) {
-    MainParser parser = new MainParser();
-    FSM fsm = parser.parse(OPModel.class);
-    RandomGenerator generator = new RandomGenerator();
-    generator.generate(fsm, 50);
+    OSMOTester tester = new OSMOTester(new OPModel());
+    //generate 50 steps, where 10 steps form a test case
+    tester.generate(10, 50);
   }
 }

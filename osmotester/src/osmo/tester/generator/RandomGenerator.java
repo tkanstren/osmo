@@ -3,7 +3,6 @@ package osmo.tester.generator;
 import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,16 +15,57 @@ import java.util.Random;
 public class RandomGenerator {
   private Random random = new Random(1);
 
-  public void generate(FSM fsm, int steps) {
-    for (int i = 0 ; i < steps ; i++) {
+  public void generate(FSM fsm, int testSize, int steps) {
+    //TODO: check sanity of testSize, steps, etc.
+    beforeSuite(fsm);
+    int size = 0;
+    beforeTest(fsm);
+    for (int i = 1 ; i < steps ; i++) {
+      size++;
+      if (size >= testSize) {
+        size = 0;
+        afterTest(fsm);
+        beforeTest(fsm);
+      }
       List<FSMTransition> enabled = getEnabled(fsm);
-      //TODO: throw exception if no suitable none available
+      //TODO: throw exception if no suitable one available
       FSMTransition next = pickOne(enabled);
       execute(fsm, next);
     }
+    afterTest(fsm);
+    afterSuite(fsm);
     //if none available, fail
-    //add before, after
     //add state coverage analysis
+  }
+
+  private void beforeSuite(FSM fsm) {
+    Collection<Method> befores = fsm.getBeforeSuites();
+    invokeAll(befores, "@BeforeSuite", fsm);
+  }
+
+  private void afterSuite(FSM fsm) {
+    Collection<Method> afters = fsm.getAfterSuites();
+    invokeAll(afters, "@AfterSuite", fsm);
+  }
+
+  private void beforeTest(FSM fsm) {
+    Collection<Method> befores = fsm.getBefores();
+    invokeAll(befores, "@Before", fsm);
+  }
+
+  private void afterTest(FSM fsm) {
+    Collection<Method> afters = fsm.getAfters();
+    invokeAll(afters, "@After", fsm);
+  }
+
+  private void invokeAll(Collection<Method> methods, String name, FSM fsm) {
+    for (Method method : methods) {
+      try {
+        method.invoke(fsm.getModel());
+      } catch (Exception e) {
+        throw new RuntimeException("Error while calling "+name+" method ("+method.getName()+")", e);
+      }
+    }
   }
 
   private FSMTransition pickOne(List<FSMTransition> transitions) {

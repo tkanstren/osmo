@@ -1,5 +1,9 @@
 package osmo.tester.parser;
 
+import osmo.tester.annotation.After;
+import osmo.tester.annotation.AfterSuite;
+import osmo.tester.annotation.Before;
+import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.annotation.Guard;
 import osmo.tester.annotation.Transition;
 import osmo.tester.model.FSM;
@@ -7,35 +11,43 @@ import osmo.tester.model.FSMTransition;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * @author Teemu Kanstren
  */
 public class MainParser {
-  public FSM parse(Class clazz) {
-    FSM fsm = null;
-    try {
-      fsm = new FSM(clazz.newInstance());
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to create model object. Did you provide a no-arg constructor?:", e);
-    }
-    Method[] methods = clazz.getMethods();
+  public FSM parse(Object obj) {
+    FSM fsm = new FSM(obj);
+    Method[] methods = obj.getClass().getMethods();
+    //TODO: check that there are some methods to execute
     for (Method method : methods) {
-      System.out.println("m:"+method);
       Annotation[] annotations = method.getAnnotations();
       for (Annotation annotation : annotations) {
-        System.out.println("a:"+annotation);
         if (annotation instanceof Transition) {
           Transition t = (Transition) annotation;
           FSMTransition transition = fsm.createTransition(t.value());
           transition.setTransition(method);
         }
         if (annotation instanceof Guard) {
-          Guard t = (Guard) annotation;
-          FSMTransition transition = fsm.createTransition(t.value());
+          Guard g = (Guard) annotation;
+          FSMTransition transition = fsm.createTransition(g.value());
           transition.addGuard(method);
+        }
+        if (annotation instanceof After) {
+          After after = (After) annotation;
+          fsm.addAfter(method);
+        }
+        if (annotation instanceof Before) {
+          Before before = (Before) annotation;
+          fsm.addBefore(method);
+        }
+        if (annotation instanceof AfterSuite) {
+          AfterSuite after = (AfterSuite) annotation;
+          fsm.addAfterSuite(method);
+        }
+        if (annotation instanceof BeforeSuite) {
+          BeforeSuite before = (BeforeSuite) annotation;
+          fsm.addBeforeSuite(method);
         }
       }
     }

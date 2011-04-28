@@ -14,10 +14,15 @@ public class ParserTests {
   public void testModel1() {
     MainParser parser = new MainParser();
     FSM fsm = parser.parse(TestModel1.class);
+    assertEquals("Number of @Before methods", 2, fsm.getBefores().size());
+    assertEquals("Number of @BeforeSuite methods", 1, fsm.getBeforeSuites().size());
+    assertEquals("Number of @After methods", 1, fsm.getAfters().size());
+    assertEquals("Number of @AfterSuite methods", 1, fsm.getAfterSuites().size());
     assertTransitionPresent(fsm, "hello", 0);
     assertTransitionPresent(fsm, "world", 2);
     assertTransitionPresent(fsm, "epixx", 1);
   }
+
 
   @Test
   public void testModel2() {

@@ -11,6 +11,10 @@ import java.util.Map;
  */
 public class FSM {
   private Map<String, FSMTransition> transitions = new HashMap<String, FSMTransition>();
+  private Collection<Method> befores = new ArrayList<Method>();
+  private Collection<Method> afters = new ArrayList<Method>();
+  private Collection<Method> beforeSuites = new ArrayList<Method>();
+  private Collection<Method> afterSuites = new ArrayList<Method>();
   private final Object model;
 
   public FSM(Object model) {
@@ -22,7 +26,7 @@ public class FSM {
   }
 
   public FSMTransition createTransition(String name) {
-    System.out.println("Creating transition:"+name);
+    //TODO: add logging
     FSMTransition transition = transitions.get(name);
     if (transition != null) {
       return transition;
@@ -69,5 +73,37 @@ public class FSM {
 
   public Collection<FSMTransition> getTransitions() {
     return transitions.values();
+  }
+
+  public void addAfter(Method method) {
+    afters.add(method);
+  }
+
+  public void addBefore(Method method) {
+    befores.add(method);
+  }
+
+  public void addAfterSuite(Method method) {
+    afterSuites.add(method);
+  }
+
+  public void addBeforeSuite(Method method) {
+    beforeSuites.add(method);
+  }
+
+  public Collection<Method> getBefores() {
+    return befores;
+  }
+
+  public Collection<Method> getAfters() {
+    return afters;
+  }
+
+  public Collection<Method> getBeforeSuites() {
+    return beforeSuites;
+  }
+
+  public Collection<Method> getAfterSuites() {
+    return afterSuites;
   }
 }
