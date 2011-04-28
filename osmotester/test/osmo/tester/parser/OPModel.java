@@ -38,7 +38,7 @@ public class OPModel {
   }
 
   @Guard("start")
-  public boolean startGuard() {
+  public boolean checkStart() {
     return counter == 0;
   }
 
@@ -49,23 +49,23 @@ public class OPModel {
   }
 
   @Guard("decrease")
-  public boolean decreaseGuard() {
+  public boolean toDecreaseOrNot() {
     return counter > 1;
   }
 
   @Transition("decrease")
-  public void DecreaseState() {
+  public void decreaseState() {
     counter--;
     System.out.println("- " + counter);
   }
 
   @Guard("increase")
-  public boolean IncreaseGuard() {
+  public boolean shallWeIncrease() {
     return counter > 0;
   }
 
   @Transition("increase")
-  public void IncreaseState() {
+  public void increaseState() {
     counter++;
     System.out.println("+ " + counter);
   }
