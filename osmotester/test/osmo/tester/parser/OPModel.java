@@ -73,6 +73,6 @@ public class OPModel {
   public static void main(String[] args) {
     OSMOTester tester = new OSMOTester(new OPModel());
     //generate 50 steps, where 10 steps form a test case
-    tester.generate(10, 50);
+    tester.generate();
   }
 }

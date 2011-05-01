@@ -11,9 +11,9 @@ import static junit.framework.Assert.*;
  */
 public class ParserTests {
   @Test
-  public void testModel1() {
+  public void testModel1() throws Exception {
     MainParser parser = new MainParser();
-    FSM fsm = parser.parse(TestModel1.class);
+    FSM fsm = parser.parse(new TestModel1());
     assertEquals("Number of @Before methods", 2, fsm.getBefores().size());
     assertEquals("Number of @BeforeSuite methods", 1, fsm.getBeforeSuites().size());
     assertEquals("Number of @After methods", 1, fsm.getAfters().size());
@@ -21,6 +21,7 @@ public class ParserTests {
     assertTransitionPresent(fsm, "hello", 0);
     assertTransitionPresent(fsm, "world", 2);
     assertTransitionPresent(fsm, "epixx", 1);
+    Thread.sleep(1000);
   }
 
 
@@ -28,7 +29,8 @@ public class ParserTests {
   public void testModel2() {
     MainParser parser = new MainParser();
     try {
-      FSM fsm = parser.parse(TestModel2.class);
+      FSM fsm = parser.parse(new TestModel2());
+      fail("Should throw exception");
     } catch (Exception e) {
       String msg = e.getMessage();
       String expected = "Invalid FSM:\n" + "Guard without transition:foo\n";
@@ -40,7 +42,8 @@ public class ParserTests {
   public void testModel3() {
     MainParser parser = new MainParser();
     try {
-      FSM fsm = parser.parse(TestModel3.class);
+      FSM fsm = parser.parse(new TestModel3());
+      fail("Should throw exception");
     } catch (Exception e) {
       String msg = e.getMessage();
       String expected = "Invalid FSM:\n" + "Invalid return type for guard (\"hello()\"):class java.lang.String.\n";
@@ -52,7 +55,8 @@ public class ParserTests {
   public void testModel4() {
     MainParser parser = new MainParser();
     try {
-      FSM fsm = parser.parse(TestModel4.class);
+      FSM fsm = parser.parse(new TestModel4());
+      fail("Should throw exception");
     } catch (Exception e) {
       String msg = e.getMessage();
       String expected = "Invalid FSM:\n" + "Guard methods are not allowed to have parameters: \"hello()\" has 1 parameters.\n";
@@ -64,7 +68,8 @@ public class ParserTests {
   public void testModel5() {
     MainParser parser = new MainParser();
     try {
-      FSM fsm = parser.parse(TestModel5.class);
+      FSM fsm = parser.parse(new TestModel5());
+      fail("Should throw exception");
     } catch (Exception e) {
       String msg = e.getMessage();
       String expected = "Invalid FSM:\n" + "Transition methods are not allowed to have parameters: \"epixx()\" has 1 parameters.\n";
@@ -76,7 +81,8 @@ public class ParserTests {
   public void testModel6() {
     MainParser parser = new MainParser();
     try {
-      FSM fsm = parser.parse(TestModel6.class);
+      FSM fsm = parser.parse(new TestModel6());
+      fail("Should throw exception");
     } catch (Exception e) {
       String msg = e.getMessage();
       String expected = "Invalid FSM:\n" +
