@@ -7,6 +7,7 @@ import osmo.tester.annotation.Before;
 import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.annotation.Guard;
 import osmo.tester.annotation.Transition;
+import osmo.tester.strategy.LengthStrategy;
 
 /**
  * @author Teemu Kanstren
@@ -72,7 +73,7 @@ public class OPModel {
 
   public static void main(String[] args) {
     OSMOTester tester = new OSMOTester(new OPModel());
-    //generate 50 steps, where 10 steps form a test case
+    tester.setSuiteStrategy(new LengthStrategy(100));
     tester.generate();
   }
 }
