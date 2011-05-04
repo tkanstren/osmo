@@ -1,6 +1,5 @@
 package osmo.tester.parser;
 
-import com.sun.deploy.net.proxy.StaticProxyManager;
 import osmo.tester.annotation.After;
 import osmo.tester.annotation.AfterSuite;
 import osmo.tester.annotation.Before;
