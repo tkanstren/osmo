@@ -10,4 +10,6 @@
 -haarakohtien käyntimäärä, coverage guided, tämän kautta optimointi
 -jos on käyty jossain tilassa niin käydään toisessa joka on vapaa, muuten random
 -skripterin tekeminen, jota voi parametrisoida
+-@TestLog annotaation lisääminen ja uudelleen nimeäminen
+-logien kirjoittelu tarkemmiksi, eli että mitä testejä on luomassa jne
 
