@@ -12,6 +12,8 @@ import osmo.tester.annotation.Transition;
  * @author Teemu Kanstren
  */
 public class OPModel {
+  //@Requirements
+  //@TestLog
   private int counter = 0;
   private int testCount = 1;
 
