@@ -6,6 +6,7 @@ import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -14,11 +15,11 @@ import java.lang.reflect.Method;
 public class TransitionParser implements AnnotationParser {
   private static Logger log = new Logger(TransitionParser.class);
 
-  public void parse(FSM fsm, Method method, Annotation annotation) {
-    Transition t = (Transition) annotation;
+  public void parse(ParserParameters parameters) {
+    Transition t = (Transition) parameters.getAnnotation();
     String name = t.value();
     log.debug("Found transition: "+name);
-    FSMTransition transition = fsm.createTransition(name);
-    transition.setTransition(method);
+    FSMTransition transition = parameters.getFsm().createTransition(name);
+    transition.setTransition(parameters.getMethod());
   }
 }

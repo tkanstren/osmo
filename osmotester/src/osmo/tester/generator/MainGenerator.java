@@ -1,12 +1,10 @@
 package osmo.tester.generator;
 
-import osmo.tester.algorithm.GenerationAlgorithm;
-import osmo.tester.algorithm.RandomAlgorithm;
+import osmo.tester.generator.algorithm.GenerationAlgorithm;
 import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
-import osmo.tester.state.State;
-import osmo.tester.strategy.ExitStrategy;
-import osmo.tester.strategy.ProbabilityStrategy;
+import osmo.tester.generator.testlog.TestLog;
+import osmo.tester.generator.strategy.ExitStrategy;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,7 +15,7 @@ import java.util.List;
  * @author Teemu Kanstren
  */
 public class MainGenerator {
-  private final State state = new State();
+  private final TestLog testLog = new TestLog();
   private final GenerationAlgorithm algorithm;
   private final ExitStrategy suiteStrategy;
   private final ExitStrategy testStrategy;
@@ -33,10 +31,10 @@ public class MainGenerator {
     beforeSuite(fsm);
     beforeTest(fsm);
     while (true) {
-      if (suiteStrategy.exitNow(state)) {
+      if (suiteStrategy.exitNow(testLog)) {
         break;
       }
-      if (testStrategy.exitNow(state)) {
+      if (testStrategy.exitNow(testLog)) {
         afterTest(fsm);
         beforeTest(fsm);
       }
@@ -60,7 +58,7 @@ public class MainGenerator {
   }
 
   private void beforeTest(FSM fsm) {
-    state.startTest();
+    testLog.startTest();
     Collection<Method> befores = fsm.getBefores();
     invokeAll(befores, "@Before", fsm);
   }
@@ -68,7 +66,7 @@ public class MainGenerator {
   private void afterTest(FSM fsm) {
     Collection<Method> afters = fsm.getAfters();
     invokeAll(afters, "@After", fsm);
-    state.endTest();
+    testLog.endTest();
   }
 
   private void invokeAll(Collection<Method> methods, String name, FSM fsm) {
@@ -108,10 +106,10 @@ public class MainGenerator {
     } catch (Exception e) {
       throw new RuntimeException("Exception while running transition ('"+transition.getName()+"'):", e);
     }
-    state.add(transition);
+    testLog.add(transition);
   }
 
-  public State getState() {
-    return state;
+  public TestLog getTestLog() {
+    return testLog;
   }
 }

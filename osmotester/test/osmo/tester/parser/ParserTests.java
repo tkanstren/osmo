@@ -1,6 +1,9 @@
 package osmo.tester.parser;
 
+import org.junit.Before;
 import org.junit.Test;
+import osmo.tester.generator.testlog.TestLog;
+import osmo.tester.log.Logger;
 import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
 
@@ -10,10 +13,16 @@ import static junit.framework.Assert.*;
  * @author Teemu Kanstren
  */
 public class ParserTests {
+  @Before
+  public void setup() {
+    Logger.debug = true;
+  }
+
   @Test
   public void testModel1() throws Exception {
-    MainParser parser = new MainParser();
-    FSM fsm = parser.parse(new TestModel1());
+    MainParser parser = new MainParser(new TestLog());
+    TestModel1 model = new TestModel1();
+    FSM fsm = parser.parse(model);
     assertEquals("Number of @Before methods", 2, fsm.getBefores().size());
     assertEquals("Number of @BeforeSuite methods", 1, fsm.getBeforeSuites().size());
     assertEquals("Number of @After methods", 1, fsm.getAfters().size());
@@ -21,13 +30,14 @@ public class ParserTests {
     assertTransitionPresent(fsm, "hello", 0);
     assertTransitionPresent(fsm, "world", 2);
     assertTransitionPresent(fsm, "epixx", 1);
+    assertNotNull("Should have TestLog set", model.getHistory());
     Thread.sleep(1000);
   }
 
 
   @Test
   public void testModel2() {
-    MainParser parser = new MainParser();
+    MainParser parser = new MainParser(new TestLog());
     try {
       FSM fsm = parser.parse(new TestModel2());
       fail("Should throw exception");
@@ -40,7 +50,7 @@ public class ParserTests {
 
   @Test
   public void testModel3() {
-    MainParser parser = new MainParser();
+    MainParser parser = new MainParser(new TestLog());
     try {
       FSM fsm = parser.parse(new TestModel3());
       fail("Should throw exception");
@@ -53,7 +63,7 @@ public class ParserTests {
 
   @Test
   public void testModel4() {
-    MainParser parser = new MainParser();
+    MainParser parser = new MainParser(new TestLog());
     try {
       FSM fsm = parser.parse(new TestModel4());
       fail("Should throw exception");
@@ -66,7 +76,7 @@ public class ParserTests {
 
   @Test
   public void testModel5() {
-    MainParser parser = new MainParser();
+    MainParser parser = new MainParser(new TestLog());
     try {
       FSM fsm = parser.parse(new TestModel5());
       fail("Should throw exception");
@@ -79,7 +89,7 @@ public class ParserTests {
 
   @Test
   public void testModel6() {
-    MainParser parser = new MainParser();
+    MainParser parser = new MainParser(new TestLog());
     try {
       FSM fsm = parser.parse(new TestModel6());
       fail("Should throw exception");

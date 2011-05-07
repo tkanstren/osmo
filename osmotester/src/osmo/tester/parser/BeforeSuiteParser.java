@@ -7,6 +7,7 @@ import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -15,9 +16,10 @@ import java.lang.reflect.Method;
 public class BeforeSuiteParser implements AnnotationParser {
   private static Logger log = new Logger(BeforeSuiteParser.class);
 
-  public void parse(FSM fsm, Method method, Annotation annotation) {
-    BeforeSuite before = (BeforeSuite) annotation;
+  public void parse(ParserParameters parameters) {
+    BeforeSuite before = (BeforeSuite) parameters.getAnnotation();
+    Method method = parameters.getMethod();
     log.debug("found @BeforeSuite method:"+method.getName());
-    fsm.addBeforeSuite(method);
+    parameters.getFsm().addBeforeSuite(method);
   }
 }

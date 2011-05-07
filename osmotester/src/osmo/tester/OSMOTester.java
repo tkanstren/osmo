@@ -1,13 +1,14 @@
 package osmo.tester;
 
-import osmo.tester.algorithm.GenerationAlgorithm;
-import osmo.tester.algorithm.RandomAlgorithm;
+import osmo.tester.generator.algorithm.GenerationAlgorithm;
+import osmo.tester.generator.algorithm.RandomAlgorithm;
 import osmo.tester.generator.MainGenerator;
+import osmo.tester.generator.testlog.TestLog;
 import osmo.tester.log.Logger;
 import osmo.tester.model.FSM;
 import osmo.tester.parser.MainParser;
-import osmo.tester.strategy.ExitStrategy;
-import osmo.tester.strategy.ProbabilityStrategy;
+import osmo.tester.generator.strategy.ExitStrategy;
+import osmo.tester.generator.strategy.ProbabilityStrategy;
 
 /**
  * @author Teemu Kanstren
@@ -23,11 +24,11 @@ public class OSMOTester {
   }
 
   public void generate() {
-    MainParser parser = new MainParser();
-    FSM fsm = parser.parse(modelObject);
     MainGenerator generator = new MainGenerator(algorithm, suiteStrategy, testStrategy);
+    TestLog testLog = generator.getTestLog();
+    MainParser parser = new MainParser(testLog);
+    FSM fsm = parser.parse(modelObject);
     generator.generate(fsm);
-    System.out.println("total tests:"+generator.getState().getHistory().size());
   }
 
   public void setSuiteStrategy(ExitStrategy suiteStrategy) {

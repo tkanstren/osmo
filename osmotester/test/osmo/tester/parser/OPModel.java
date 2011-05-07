@@ -7,14 +7,14 @@ import osmo.tester.annotation.Before;
 import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.annotation.Guard;
 import osmo.tester.annotation.Transition;
-import osmo.tester.strategy.LengthStrategy;
+import osmo.tester.generator.strategy.LengthStrategy;
 
 /**
  * @author Teemu Kanstren
  */
 public class OPModel {
   //@Requirements
-  //@TestLog
+  //@TestLogField
   private int counter = 0;
   private int testCount = 1;
 

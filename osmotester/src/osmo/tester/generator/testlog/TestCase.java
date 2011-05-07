@@ -1,4 +1,4 @@
-package osmo.tester.state;
+package osmo.tester.generator.testlog;
 
 import osmo.tester.model.FSMTransition;
 

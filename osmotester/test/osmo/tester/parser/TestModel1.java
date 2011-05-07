@@ -5,12 +5,21 @@ import osmo.tester.annotation.AfterSuite;
 import osmo.tester.annotation.Before;
 import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.annotation.Guard;
+import osmo.tester.annotation.TestLogField;
 import osmo.tester.annotation.Transition;
+import osmo.tester.generator.testlog.TestLog;
 
 /**
  * @author Teemu Kanstren
  */
 public class TestModel1 {
+  @TestLogField
+  private TestLog history = null;
+
+  public TestLog getHistory() {
+    return history;
+  }
+
   @Before
   public void start1() {
 

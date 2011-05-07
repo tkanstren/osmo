@@ -1,8 +1,7 @@
-package osmo.tester.algorithm;
+package osmo.tester.generator.algorithm;
 
 import osmo.tester.model.FSMTransition;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

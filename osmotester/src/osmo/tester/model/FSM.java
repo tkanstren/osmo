@@ -1,5 +1,7 @@
 package osmo.tester.model;
 
+import osmo.tester.log.Logger;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,11 +12,13 @@ import java.util.Map;
  * @author Teemu Kanstren
  */
 public class FSM {
+  private static Logger log = new Logger(FSM.class);
   private Map<String, FSMTransition> transitions = new HashMap<String, FSMTransition>();
   private Collection<Method> befores = new ArrayList<Method>();
   private Collection<Method> afters = new ArrayList<Method>();
   private Collection<Method> beforeSuites = new ArrayList<Method>();
   private Collection<Method> afterSuites = new ArrayList<Method>();
+  private Collection<String> requirements = new ArrayList<String>();
   private final Object model;
 
   public FSM(Object model) {
@@ -26,31 +30,38 @@ public class FSM {
   }
 
   public FSMTransition createTransition(String name) {
-    //TODO: add logging
+    log.debug("Creating transition: "+name);
     FSMTransition transition = transitions.get(name);
     if (transition != null) {
       return transition;
     }
     transition = new FSMTransition(name);
     transitions.put(name, transition);
+    log.debug("Transition created");
     return transition;
   }
 
   public void check() {
+    log.debug("Checking FSM validity");
     String errors = "";
     for (FSMTransition transition : transitions.values()) {
       Method method = transition.getTransition();
+      String name = transition.getName();
+      log.debug("Checking transition:"+ name);
       if (method == null) {
-        errors += "Guard without transition:"+transition.getName()+"\n";
+        errors += "Guard without transition:"+ name +"\n";
+        log.debug("Error: Found guard without a matching transition - "+ name);
       } else if (method.getParameterTypes().length > 0) {
         int p = method.getParameterTypes().length;
         errors += "Transition methods are not allowed to have parameters: \""+method.getName()+"()\" has "+p+" parameters.\n";
+        log.debug("Error: Found transition with invalid parameters - "+ name);
       }
       errors = checkGuards(transition, errors);
     }
     if (errors.length() > 0) {
       throw new IllegalStateException("Invalid FSM:\n"+errors);
     }
+    log.debug("FSM checked");
   }
 
   private String checkGuards(FSMTransition transition, String errors) {
@@ -105,5 +116,13 @@ public class FSM {
 
   public Collection<Method> getAfterSuites() {
     return afterSuites;
+  }
+
+  public Collection<String> getRequirements() {
+    return requirements;
+  }
+
+  public void addRequirement(String requirement) {
+    requirements.add(requirement);
   }
 }

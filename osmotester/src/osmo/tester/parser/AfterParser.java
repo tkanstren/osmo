@@ -7,6 +7,7 @@ import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -15,9 +16,11 @@ import java.lang.reflect.Method;
 public class AfterParser implements AnnotationParser {
   private static Logger log = new Logger(AfterParser.class);
 
-  public void parse(FSM fsm, Method method, Annotation annotation) {
-    After after = (After) annotation;
+  public void parse(ParserParameters parameters) {
+    After after = (After) parameters.getAnnotation();
+    //todo: check there is a method (contract)
+    Method method = parameters.getMethod();
     log.debug("found @After method:"+method.getName());
-    fsm.addAfter(method);
+    parameters.getFsm().addAfter(method);
   }
 }

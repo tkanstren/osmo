@@ -1,4 +1,4 @@
-package osmo.tester.state;
+package osmo.tester.generator.testlog;
 
 import osmo.tester.model.FSMTransition;
 
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Teemu Kanstren
  */
-public class State {
+public class TestLog {
   private TestCase current = null;
   private List<TestCase> history = new ArrayList<TestCase>();
 

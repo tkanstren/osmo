@@ -1,7 +1,7 @@
-package osmo.tester.strategy;
+package osmo.tester.generator.strategy;
 
 import osmo.tester.log.Logger;
-import osmo.tester.state.State;
+import osmo.tester.generator.testlog.TestLog;
 
 import java.util.Random;
 
@@ -17,7 +17,7 @@ public class ProbabilityStrategy implements ExitStrategy {
     this.threshold = threshold;
   }
 
-  public boolean exitNow(State state) {
+  public boolean exitNow(TestLog state) {
     double v = random.nextDouble();
     log.debug("value "+v+" threshold "+threshold);
     return v >= threshold;

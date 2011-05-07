@@ -1,6 +1,6 @@
-package osmo.tester.strategy;
+package osmo.tester.generator.strategy;
 
-import osmo.tester.state.State;
+import osmo.tester.generator.testlog.TestLog;
 
 /**
  * @author Teemu Kanstren
@@ -12,7 +12,7 @@ public class LengthStrategy implements ExitStrategy {
     this.length = length;
   }
 
-  public boolean exitNow(State state) {
+  public boolean exitNow(TestLog state) {
     return state.totalSteps() > length;
   }
 }
