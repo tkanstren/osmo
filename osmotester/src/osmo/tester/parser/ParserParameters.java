@@ -2,6 +2,7 @@ package osmo.tester.parser;
 
 import osmo.tester.generator.testlog.TestLog;
 import osmo.tester.model.FSM;
+import osmo.tester.model.Requirements;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -15,6 +16,7 @@ public class ParserParameters {
   private Object model = null;
   private Object annotation = null;
   private TestLog testLog = null;
+  private Requirements requirements = null;
   private Field field = null;
   private Method method = null;
 
@@ -40,14 +42,6 @@ public class ParserParameters {
 
   public void setAnnotation(Object annotation) {
     this.annotation = annotation;
-  }
-
-  public TestLog getTestLog() {
-    return testLog;
-  }
-
-  public void setTestLog(TestLog testLog) {
-    this.testLog = testLog;
   }
 
   public Field getField() {

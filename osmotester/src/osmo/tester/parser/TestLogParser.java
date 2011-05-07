@@ -24,7 +24,7 @@ public class TestLogParser implements AnnotationParser {
       field.setAccessible(true);
       Object model = parameters.getModel();
       //TODO: add contract: testlog cannot be null
-      TestLog testLog = parameters.getTestLog();
+      TestLog testLog = parameters.getFsm().getTestLog();
       field.set(model, testLog);
       log.debug("Value is now set to: "+testLog);
     } catch (IllegalAccessException e) {

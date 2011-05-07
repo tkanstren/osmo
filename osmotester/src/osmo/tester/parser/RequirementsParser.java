@@ -1,26 +1,24 @@
 package osmo.tester.parser;
 
-import osmo.tester.annotation.Requirements;
+import osmo.tester.annotation.RequirementsField;
 import osmo.tester.model.FSM;
+import osmo.tester.model.Requirements;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * @author Teemu Kanstren
  */
 public class RequirementsParser implements AnnotationParser {
   public void parse(ParserParameters parameters) {
-    Requirements requirements = (Requirements) parameters.getAnnotation();
+    RequirementsField annotation = (RequirementsField) parameters.getAnnotation();
     try {
       Field field = parameters.getField();
+      //to enable setting private fields
+      field.setAccessible(true);
       Object model = parameters.getModel();
-      String[] reqs = (String[]) field.get(model);
-      FSM fsm = parameters.getFsm();
-      for (String req : reqs) {
-        fsm.addRequirement(req);
-      }
+      Requirements requirements = (Requirements) field.get(model);
+      parameters.getFsm().setRequirements(requirements);
     } catch (IllegalAccessException e) {
       e.printStackTrace();
     }

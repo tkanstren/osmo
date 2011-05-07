@@ -25,10 +25,11 @@ public class OSMOTester {
 
   public void generate() {
     MainGenerator generator = new MainGenerator(algorithm, suiteStrategy, testStrategy);
-    TestLog testLog = generator.getTestLog();
-    MainParser parser = new MainParser(testLog);
+    MainParser parser = new MainParser();
     FSM fsm = parser.parse(modelObject);
     generator.generate(fsm);
+    System.out.println("generated "+fsm.getTestLog().getHistory().size()+" tests.\n");
+    System.out.println(fsm.getRequirements().printCoverage());
   }
 
   public void setSuiteStrategy(ExitStrategy suiteStrategy) {

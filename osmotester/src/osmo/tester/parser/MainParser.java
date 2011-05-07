@@ -5,12 +5,14 @@ import osmo.tester.annotation.AfterSuite;
 import osmo.tester.annotation.Before;
 import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.annotation.Guard;
+import osmo.tester.annotation.RequirementsField;
 import osmo.tester.annotation.TestLogField;
 import osmo.tester.annotation.Transition;
 import osmo.tester.generator.testlog.TestLog;
 import osmo.tester.log.Logger;
 import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
+import osmo.tester.model.Requirements;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -24,9 +26,8 @@ import java.util.Map;
 public class MainParser {
   private static Logger log = new Logger(MainParser.class);
   private final Map<Class<? extends Annotation>, AnnotationParser> parsers = new HashMap<Class<? extends Annotation>, AnnotationParser>();
-  private final TestLog testLog;
 
-  public MainParser(TestLog testLog) {
+  public MainParser() {
     parsers.put(Transition.class, new TransitionParser());
     parsers.put(Guard.class, new GuardParser());
     parsers.put(After.class, new AfterParser());
@@ -34,7 +35,7 @@ public class MainParser {
     parsers.put(AfterSuite.class, new AfterSuiteParser());
     parsers.put(BeforeSuite.class, new BeforeSuiteParser());
     parsers.put(TestLogField.class, new TestLogParser());
-    this.testLog = testLog;
+    parsers.put(RequirementsField.class, new RequirementsParser());
   }
 
   public FSM parse(Object obj) {
@@ -52,7 +53,6 @@ public class MainParser {
     ParserParameters parameters = new ParserParameters();
     parameters.setFsm(fsm);
     parameters.setModel(obj);
-    parameters.setTestLog(testLog);
     for (Field field : fields) {
       log.debug("field:"+field);
       parameters.setField(field);

@@ -17,7 +17,7 @@ public class ProbabilityStrategy implements ExitStrategy {
     this.threshold = threshold;
   }
 
-  public boolean exitNow(TestLog state) {
+  public boolean exitNow(TestLog testLog, boolean singleTest) {
     double v = random.nextDouble();
     log.debug("value "+v+" threshold "+threshold);
     return v >= threshold;

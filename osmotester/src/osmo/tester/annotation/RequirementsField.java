@@ -7,5 +7,5 @@ import java.lang.annotation.RetentionPolicy;
  * @author Teemu Kanstren
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Requirements {
+public @interface RequirementsField {
 }

@@ -29,7 +29,10 @@ public class TestLog {
     for (TestCase test : history) {
       count += test.getTransitions().size();
     }
-    count += current.getTransitions().size();
+    //current is null when suite is initialized but no tests are started
+    if (current != null) {
+      count += current.getTransitions().size();
+    }
     return count;
   }
 
@@ -39,5 +42,9 @@ public class TestLog {
 
   public List<TestCase> getHistory() {
     return history;
+  }
+
+  public int currentSteps() {
+    return current.getTransitions().size();
   }
 }

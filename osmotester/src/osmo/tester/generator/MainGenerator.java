@@ -15,7 +15,7 @@ import java.util.List;
  * @author Teemu Kanstren
  */
 public class MainGenerator {
-  private final TestLog testLog = new TestLog();
+  private TestLog testLog = null;
   private final GenerationAlgorithm algorithm;
   private final ExitStrategy suiteStrategy;
   private final ExitStrategy testStrategy;
@@ -27,23 +27,19 @@ public class MainGenerator {
   }
 
   public void generate(FSM fsm) {
+    testLog = fsm.getTestLog();
     //TODO: check sanity of testSize, steps, etc.
     beforeSuite(fsm);
-    beforeTest(fsm);
-    while (true) {
-      if (suiteStrategy.exitNow(testLog)) {
-        break;
+    while (!suiteStrategy.exitNow(testLog, false)) {
+      beforeTest(fsm);
+      while (!testStrategy.exitNow(testLog, true)) {
+        List<FSMTransition> enabled = getEnabled(fsm);
+        //TODO: throw exception if no suitable one available + add tests
+        FSMTransition next = algorithm.choose(enabled);
+        execute(fsm, next);
       }
-      if (testStrategy.exitNow(testLog)) {
-        afterTest(fsm);
-        beforeTest(fsm);
-      }
-      List<FSMTransition> enabled = getEnabled(fsm);
-      //TODO: throw exception if no suitable one available + add tests
-      FSMTransition next = algorithm.choose(enabled);
-      execute(fsm, next);
+      afterTest(fsm);
     }
-    afterTest(fsm);
     afterSuite(fsm);
   }
 

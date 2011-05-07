@@ -1,5 +1,6 @@
 package osmo.tester.model;
 
+import osmo.tester.generator.testlog.TestLog;
 import osmo.tester.log.Logger;
 
 import java.lang.reflect.Method;
@@ -12,13 +13,14 @@ import java.util.Map;
  * @author Teemu Kanstren
  */
 public class FSM {
-  private static Logger log = new Logger(FSM.class);
+  private static final Logger log = new Logger(FSM.class);
   private Map<String, FSMTransition> transitions = new HashMap<String, FSMTransition>();
   private Collection<Method> befores = new ArrayList<Method>();
   private Collection<Method> afters = new ArrayList<Method>();
   private Collection<Method> beforeSuites = new ArrayList<Method>();
   private Collection<Method> afterSuites = new ArrayList<Method>();
-  private Collection<String> requirements = new ArrayList<String>();
+  private final TestLog testLog = new TestLog();
+  private Requirements requirements = null;
   private final Object model;
 
   public FSM(Object model) {
@@ -118,11 +120,15 @@ public class FSM {
     return afterSuites;
   }
 
-  public Collection<String> getRequirements() {
+  public TestLog getTestLog() {
+    return testLog;
+  }
+
+  public Requirements getRequirements() {
     return requirements;
   }
 
-  public void addRequirement(String requirement) {
-    requirements.add(requirement);
+  public void setRequirements(Requirements requirements) {
+    this.requirements = requirements;
   }
 }
