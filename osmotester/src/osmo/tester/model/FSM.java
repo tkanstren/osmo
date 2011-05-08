@@ -20,7 +20,7 @@ public class FSM {
   private Collection<Method> beforeSuites = new ArrayList<Method>();
   private Collection<Method> afterSuites = new ArrayList<Method>();
   private final TestLog testLog = new TestLog();
-  private Requirements requirements = null;
+  private Requirements requirements;
   private final Object model;
 
   public FSM(Object model) {
@@ -45,6 +45,10 @@ public class FSM {
 
   public void check() {
     log.debug("Checking FSM validity");
+    if (requirements == null) {
+      log.debug("No requirements object defined. Creating new.");
+      setRequirements(new Requirements());
+    }
     String errors = "";
     for (FSMTransition transition : transitions.values()) {
       Method method = transition.getTransition();
@@ -130,5 +134,6 @@ public class FSM {
 
   public void setRequirements(Requirements requirements) {
     this.requirements = requirements;
+    requirements.setTestLog(testLog);
   }
 }

@@ -24,14 +24,18 @@ public class TestLog {
     current.addTransition(transition);
   }
 
+  public void covered(String requirement) {
+    current.covered(requirement);
+  }
+
   public int totalSteps() {
     int count = 0;
     for (TestCase test : history) {
-      count += test.getTransitions().size();
+      count += test.getSteps().size();
     }
     //current is null when suite is initialized but no tests are started
     if (current != null) {
-      count += current.getTransitions().size();
+      count += current.getSteps().size();
     }
     return count;
   }
@@ -45,6 +49,6 @@ public class TestLog {
   }
 
   public int currentSteps() {
-    return current.getTransitions().size();
+    return current.getSteps().size();
   }
 }

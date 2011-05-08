@@ -9,13 +9,20 @@ import java.util.List;
  * @author Teemu Kanstren
  */
 public class TestCase {
-  private List<FSMTransition> transitions = new ArrayList<FSMTransition>();
+  private List<TestStep> steps = new ArrayList<TestStep>();
+  private TestStep currentStep = null;
 
   public void addTransition(FSMTransition transition) {
-    transitions.add(transition);
+    TestStep step = new TestStep(transition);
+    steps.add(step);
+    currentStep = step;
   }
 
-  public List<FSMTransition> getTransitions() {
-    return transitions;
+  public void covered(String requirement) {
+    currentStep.covered(requirement);
+  }
+
+  public List<TestStep> getSteps() {
+    return steps;
   }
 }

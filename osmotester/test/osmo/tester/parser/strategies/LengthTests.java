@@ -32,7 +32,7 @@ public class LengthTests {
     List<TestCase> history = testLog.getHistory();
     assertEquals("Number of tests generated", expectedLength, history.size());
     for (TestCase test : history) {
-      assertEquals("Number of steps in a test case", expectedLength, test.getTransitions().size());
+      assertEquals("Number of steps in a test case", expectedLength, test.getSteps().size());
     }
   }
 

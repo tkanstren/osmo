@@ -14,6 +14,10 @@ import osmo.tester.generator.testlog.TestLog;
 import osmo.tester.model.Requirements;
 
 /**
+ * Same as the other calculator but without explicit state enumeration. Instead this will keep the counter > 0 and
+ * use the counter itself to define the state. This also illustrates how you can name your methods and elements in
+ * any way you like, since only the annotations are used.
+ *
  * @author Teemu Kanstren
  */
 public class CalculatorModel {
@@ -23,10 +27,12 @@ public class CalculatorModel {
   private TestLog history = null;
   private int counter = 0;
   private int testCount = 1;
+  private static final String REQ_INCREASE = "increase";
+  private static final String REQ_DECREASE = "decrease";
 
   public CalculatorModel() {
-    requirement.add("increment");
-    requirement.add("decrement");
+    requirement.add(REQ_INCREASE);
+    requirement.add(REQ_DECREASE);
   }
 
   public TestLog getHistory() {
@@ -73,7 +79,7 @@ public class CalculatorModel {
 
   @Transition("decrease")
   public void decreaseState() {
-    requirement.covered("decrease");
+    requirement.covered(REQ_DECREASE);
     counter--;
     System.out.println("- " + counter);
   }
@@ -85,7 +91,7 @@ public class CalculatorModel {
 
   @Transition("increase")
   public void increaseState() {
-    requirement.covered("increase");
+    requirement.covered(REQ_INCREASE);
     counter++;
     System.out.println("+ " + counter);
   }

@@ -1,5 +1,7 @@
 package osmo.tester.model;
 
+import osmo.tester.generator.testlog.TestLog;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,6 +13,14 @@ import java.util.HashSet;
 public class Requirements {
   private Collection<String> requirements = new ArrayList<String>();
   private Collection<String> covered = new HashSet<String>();
+  private TestLog testLog = null;
+
+  public Requirements() {
+  }
+
+  public void setTestLog(TestLog testLog) {
+    this.testLog = testLog;
+  }
 
   public void add(String requirement) {
     //check if already exists
@@ -22,6 +32,7 @@ public class Requirements {
 
   public void covered(String requirement) {
     covered.add(requirement);
+    testLog.covered(requirement);
   }
 
   public Collection<String> getRequirements() {
@@ -37,6 +48,11 @@ public class Requirements {
   }
 
   public String printCoverage() {
+    if (requirements.size() == 0) {
+      return "No requirements defined. Not calculating or showing requirements coverage. \n" +
+              "If you want to see requirements coverage you need to define a @RequirementsField\n" +
+              "and add some requirements and their coverage into the model.";
+    }
     StringBuilder out = new StringBuilder();
     out.append("Requirements:"+requirements+"\n");
     out.append("Covered:"+covered+"\n");
