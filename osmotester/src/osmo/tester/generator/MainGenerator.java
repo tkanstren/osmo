@@ -99,6 +99,9 @@ public class MainGenerator {
         }
       }
     }
+    if (enabled.size() == 0) {
+      throw new IllegalStateException("No transition available.");
+    }
     return enabled;
   }
 

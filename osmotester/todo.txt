@@ -12,4 +12,12 @@
 -skripterin tekeminen, jota voi parametrisoida
 -@TestLog annotaation lisääminen ja uudelleen nimeäminen
 -logien kirjoittelu tarkemmiksi, eli että mitä testejä on luomassa jne
+-testoraclet omaan tilaan: eli @Oracle ja sille ehkä guardi? tyyliin joka tilan jälkeen, annettujen tilojen jälkeen, tietyillä ehdoilla?
+-mahdollisuus määrittää itse milloin testien generointi lopetetaan, tyyliin bottles == 0
+-guardille usean transition linkkaaminen, ja erikoiskeissit kuten "all"
+-parametrisointia invarianttien pohjalta
+-polkujen suorituksen ohjausta perustuen invarianttien historiaan
+-logien eri tasot, ei vain debuggi
+-webbisivu jossa issue tracker jne
+-@Oracle, @AllGuard, @CommonGuard, @EndCondition
 

@@ -15,6 +15,7 @@ import java.util.Map;
 public class FSM {
   private static final Logger log = new Logger(FSM.class);
   private Map<String, FSMTransition> transitions = new HashMap<String, FSMTransition>();
+  private Collection<Method> genericGuards = new ArrayList<Method>();
   private Collection<Method> befores = new ArrayList<Method>();
   private Collection<Method> afters = new ArrayList<Method>();
   private Collection<Method> beforeSuites = new ArrayList<Method>();
@@ -71,6 +72,10 @@ public class FSM {
   }
 
   private String checkGuards(FSMTransition transition, String errors) {
+    //we add all generic guards to the set of guards for this transition. doing it here includes them in the checks
+    for (Method guard : genericGuards) {
+      transition.addGuard(guard);
+    }
     for (Method guard : transition.getGuards()) {
       Class<?> type = guard.getReturnType();
       if (!(type.equals(boolean.class))) {
@@ -135,5 +140,9 @@ public class FSM {
   public void setRequirements(Requirements requirements) {
     this.requirements = requirements;
     requirements.setTestLog(testLog);
+  }
+
+  public void addGenericGuard(Method method) {
+    genericGuards.add(method);
   }
 }
