@@ -1,14 +1,13 @@
 package osmo.tester;
 
+import osmo.tester.generator.MainGenerator;
 import osmo.tester.generator.algorithm.GenerationAlgorithm;
 import osmo.tester.generator.algorithm.RandomAlgorithm;
-import osmo.tester.generator.MainGenerator;
-import osmo.tester.generator.testlog.TestLog;
+import osmo.tester.generator.strategy.ExitStrategy;
+import osmo.tester.generator.strategy.ProbabilityStrategy;
 import osmo.tester.log.Logger;
 import osmo.tester.model.FSM;
 import osmo.tester.parser.MainParser;
-import osmo.tester.generator.strategy.ExitStrategy;
-import osmo.tester.generator.strategy.ProbabilityStrategy;
 
 /**
  * @author Teemu Kanstren
@@ -28,7 +27,7 @@ public class OSMOTester {
     MainParser parser = new MainParser();
     FSM fsm = parser.parse(modelObject);
     generator.generate(fsm);
-    System.out.println("generated "+fsm.getTestLog().getHistory().size()+" tests.\n");
+    System.out.println("generated " + fsm.getTestSuite().getHistory().size() + " tests.\n");
     System.out.println(fsm.getRequirements().printCoverage());
   }
 

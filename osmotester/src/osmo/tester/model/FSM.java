@@ -1,6 +1,6 @@
 package osmo.tester.model;
 
-import osmo.tester.generator.testlog.TestLog;
+import osmo.tester.generator.testsuite.TestSuite;
 import osmo.tester.log.Logger;
 
 import java.lang.reflect.Method;
@@ -10,20 +10,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Represents the given model object in terms of a finite state machine (FSM).
+ * Produced by the parser and used by the generator to create actual test cases.
+ *
  * @author Teemu Kanstren
  */
 public class FSM {
   private static final Logger log = new Logger(FSM.class);
+  /** Key = transition name (from @Transition("name")), Value = transition object */
   private Map<String, FSMTransition> transitions = new HashMap<String, FSMTransition>();
+  /** List of generic guards that apply to all transitions. */
   private Collection<Method> genericGuards = new ArrayList<Method>();
+  /** List of methods to be executed before each test case. */
   private Collection<Method> befores = new ArrayList<Method>();
+  /** List of methods to be executed after each test case. */
   private Collection<Method> afters = new ArrayList<Method>();
+  /** List of methods to be executed before the overall test suite. */
   private Collection<Method> beforeSuites = new ArrayList<Method>();
+  /** List of methods to be executed after the overall test suite. */
   private Collection<Method> afterSuites = new ArrayList<Method>();
-  private final TestLog testLog = new TestLog();
+  /** The generated test suite (or one being generated). */
+  private final TestSuite testSuite = new TestSuite();
+  /** The list of requirements that needs to be covered. */
   private Requirements requirements;
+  /** The model object itself, implementing the actual transition methods etc. */
   private final Object model;
 
+  /**
+   * Constructor.
+   *
+   * @param model The model object that implements the transitions, guards, etc.
+   */
   public FSM(Object model) {
     this.model = model;
   }
@@ -32,6 +49,13 @@ public class FSM {
     return model;
   }
 
+  /**
+   * Returns an existing object for the requested transition name or creates a new one if one was not previously
+   * fount existing.
+   *
+   * @param name The name of the transition. Taken from @Transition("name")
+   * @return A transition object for the requested name.
+   */
   public FSMTransition createTransition(String name) {
     log.debug("Creating transition: "+name);
     FSMTransition transition = transitions.get(name);
@@ -44,10 +68,19 @@ public class FSM {
     return transition;
   }
 
+  /**
+   * Checks the FSM for validity. This includes the following constraints:
+   * -Is a requirements object defined in the model? if so use it, otherwise create empty one.
+   * -Check that each @Guard has a matching transition.
+   * -Check that no @Transition method has parameters.
+   * -Check that each @Guard returns a boolean value.
+   * -Check that no @Guard method has a return value.
+   */
   public void check() {
     log.debug("Checking FSM validity");
     if (requirements == null) {
       log.debug("No requirements object defined. Creating new.");
+      //user the setRequirements method to also initialize the requirements object missing state
       setRequirements(new Requirements());
     }
     String errors = "";
@@ -71,6 +104,16 @@ public class FSM {
     log.debug("FSM checked");
   }
 
+  /**
+   * Check the guards for the given transition.
+   * Since a new transition is previously generated for each guard that previously had no transition defined,
+   * a guard without a transition is also checked here as it is simply a {@link FSMTransition} object without
+   * the actual transition method defined but with a set of guards defined.
+   *
+   * @param transition The transition to check.
+   * @param errors The current error message string.
+   * @return The error msg string given with possible new errors appended.
+   */
   private String checkGuards(FSMTransition transition, String errors) {
     //we add all generic guards to the set of guards for this transition. doing it here includes them in the checks
     for (Method guard : genericGuards) {
@@ -129,19 +172,31 @@ public class FSM {
     return afterSuites;
   }
 
-  public TestLog getTestLog() {
-    return testLog;
+  public TestSuite getTestSuite() {
+    return testSuite;
   }
 
   public Requirements getRequirements() {
     return requirements;
   }
 
+  /**
+   * Sets the Requirements object, either from the parser if it found one in the model object or from this class
+   * if not. Also initialized the requirements object to contain the {@link TestSuite} object for storing and
+   * comparing covered requirements.
+   *
+   * @param requirements The requirements object for defining requirements that should be covered.
+   */
   public void setRequirements(Requirements requirements) {
     this.requirements = requirements;
-    requirements.setTestLog(testLog);
+    requirements.setTestSuite(testSuite);
   }
 
+  /**
+   * Add a guard that should return true for all methods in the test model.
+   *
+   * @param method The guard method to be invoked for evaluation.
+   */
   public void addGenericGuard(Method method) {
     genericGuards.add(method);
   }

@@ -7,10 +7,10 @@ import osmo.tester.annotation.Before;
 import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.annotation.Guard;
 import osmo.tester.annotation.RequirementsField;
-import osmo.tester.annotation.TestLogField;
+import osmo.tester.annotation.TestSuiteField;
 import osmo.tester.annotation.Transition;
 import osmo.tester.generator.strategy.LengthStrategy;
-import osmo.tester.generator.testlog.TestLog;
+import osmo.tester.generator.testsuite.TestSuite;
 import osmo.tester.model.Requirements;
 
 /**
@@ -23,8 +23,8 @@ import osmo.tester.model.Requirements;
 public class CalculatorModel {
   @RequirementsField
   private Requirements requirement = new Requirements();
-  @TestLogField
-  private TestLog history = null;
+  @TestSuiteField
+  private TestSuite history = null;
   private int counter = 0;
   private int testCount = 1;
   private static final String REQ_INCREASE = "increase";
@@ -35,7 +35,7 @@ public class CalculatorModel {
     requirement.add(REQ_DECREASE);
   }
 
-  public TestLog getHistory() {
+  public TestSuite getHistory() {
     return history;
   }
 

@@ -4,19 +4,27 @@ import osmo.tester.OSMOTester;
 import osmo.tester.annotation.AfterSuite;
 import osmo.tester.annotation.Before;
 import osmo.tester.annotation.Guard;
-import osmo.tester.annotation.TestLogField;
+import osmo.tester.annotation.TestSuiteField;
 import osmo.tester.annotation.Transition;
-import osmo.tester.generator.testlog.TestLog;
+import osmo.tester.generator.testsuite.TestSuite;
 
 /**
+ * Example of a vending machine.
+ * Takes 10, 20, and 50 cent coins.
+ * Maximum of 100 cents allowed to be inserted.
+ * If inserting a coin would go over total of 100 cents, it is not allowed.
+ * When 100 cents inserted the "vend" transition can be taken.
+ * When "vend" is taken, number of coins is reset to 0 and a bottle is deducted from the number of available bottles.
+ * When there are only 0 bottles left, all states are disabled.
+ *
  * @author Teemu Kanstren
  */
 public class VendingExample {
   private Scripter scripter = new Scripter();
   private int coins = 0;
   private int bottles = 10;
-  @TestLogField
-  private TestLog testLog = null;
+  @TestSuiteField
+  private TestSuite testSuite = null;
 
   @Guard("all")
   public boolean gotBottles() {
@@ -28,13 +36,13 @@ public class VendingExample {
     coins = 0;
     //uncomment this for failure to continute with 0 available transitions
     bottles = 10;
-    int tests = testLog.getHistory().size()+1;
+    int tests = testSuite.getHistory().size()+1;
     System.out.println("Starting test:"+ tests);
   }
 
   @AfterSuite
   public void done() {
-    System.out.println("Created total of "+testLog.getHistory().size()+" tests.");
+    System.out.println("Created total of "+ testSuite.getHistory().size()+" tests.");
   }
 
   @Guard("20cents")

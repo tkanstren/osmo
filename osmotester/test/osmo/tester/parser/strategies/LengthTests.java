@@ -4,8 +4,8 @@ import org.junit.Test;
 import osmo.tester.OSMOTester;
 import osmo.tester.examples.CalculatorModel;
 import osmo.tester.generator.strategy.LengthStrategy;
-import osmo.tester.generator.testlog.TestCase;
-import osmo.tester.generator.testlog.TestLog;
+import osmo.tester.generator.testsuite.TestCase;
+import osmo.tester.generator.testsuite.TestSuite;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class LengthTests {
     tester.setTestStrategy(testStrategy);
     tester.setSuiteStrategy(testStrategy);
     tester.generate();
-    TestLog testLog = calculator.getHistory();
+    TestSuite testLog = calculator.getHistory();
     //TODO: assert statements for wider set of constraints
     List<TestCase> history = testLog.getHistory();
     assertEquals("Number of tests generated", expectedLength, history.size());

@@ -2,19 +2,17 @@ package osmo.tester.parser;
 
 import osmo.tester.annotation.Transition;
 import osmo.tester.log.Logger;
-import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 /**
+ * Parses {@link Transition} annotations from the given model object.
+ *
  * @author Teemu Kanstren
  */
 public class TransitionParser implements AnnotationParser {
   private static Logger log = new Logger(TransitionParser.class);
 
+  @Override
   public void parse(ParserParameters parameters) {
     Transition t = (Transition) parameters.getAnnotation();
     String name = t.value();

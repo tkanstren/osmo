@@ -1,11 +1,11 @@
 package osmo.tester.generator;
 
 import osmo.tester.generator.algorithm.GenerationAlgorithm;
+import osmo.tester.generator.strategy.ExitStrategy;
+import osmo.tester.generator.testsuite.TestSuite;
 import osmo.tester.log.Logger;
 import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
-import osmo.tester.generator.testlog.TestLog;
-import osmo.tester.generator.strategy.ExitStrategy;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -13,23 +13,43 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * The main test generator class.
+ * Takes as input the finite state machine model parsed by {@link osmo.tester.parser.MainParser}.
+ * Runs test generation on this model using the defined algorithms, exit strategies, etc.
+ *
  * @author Teemu Kanstren
  */
 public class MainGenerator {
   private static Logger log = new Logger(MainGenerator.class);
-  private TestLog testLog = null;
+  /** Test generation history. Initialized from the given model to enable sharing the object with model and generator. */
+  private TestSuite testLog = null;
+  /** The set of enabled transitions in the current state is passed to this algorithm to pick one to execute. */
   private final GenerationAlgorithm algorithm;
+  /** Defines when test suite generation should be stopped. Invoked between each test case. */
   private final ExitStrategy suiteStrategy;
+  /** Defines when test case generation should be stopped. Invoked between each test step. */
   private final ExitStrategy testStrategy;
 
+  /**
+   * Constructor.
+   *
+   * @param algorithm The set of enabled transitions in the current state is passed to this algorithm to pick one to execute.
+   * @param suiteStrategy Defines when test suite generation should be stopped. Invoked between each test case.
+   * @param testStrategy Defines when test case generation should be stopped. Invoked between each test step.
+   */
   public MainGenerator(GenerationAlgorithm algorithm, ExitStrategy suiteStrategy, ExitStrategy testStrategy) {
     this.algorithm = algorithm;
     this.suiteStrategy = suiteStrategy;
     this.testStrategy = testStrategy;
   }
 
+  /**
+   * Invoked to start the test generation using the configured parameters.
+   *
+   * @param fsm Describes the test model in an FSM format.
+   */
   public void generate(FSM fsm) {
-    testLog = fsm.getTestLog();
+    testLog = fsm.getTestSuite();
     //TODO: check sanity of testSize, steps, etc.
     log.debug("Starting test suite generation");
     beforeSuite(fsm);
@@ -39,7 +59,7 @@ public class MainGenerator {
       while (!testStrategy.exitNow(testLog, true)) {
         List<FSMTransition> enabled = getEnabled(fsm);
         //TODO: throw exception if no suitable one available + add tests
-        FSMTransition next = algorithm.choose(enabled);
+        FSMTransition next = algorithm.choose(testLog, enabled);
         log.debug("Taking transition "+next.getName());
         execute(fsm, next);
       }
@@ -61,6 +81,7 @@ public class MainGenerator {
   }
 
   private void beforeTest(FSM fsm) {
+    //update history
     testLog.startTest();
     Collection<Method> befores = fsm.getBefores();
     invokeAll(befores, "@Before", fsm);
@@ -69,9 +90,17 @@ public class MainGenerator {
   private void afterTest(FSM fsm) {
     Collection<Method> afters = fsm.getAfters();
     invokeAll(afters, "@After", fsm);
+    //update history
     testLog.endTest();
   }
 
+  /**
+   * Invokes the given set of methods on the target test object.
+   *
+   * @param methods The methods to be invoked.
+   * @param name  The annotation name describing the methods, used in error messages.
+   * @param fsm The model object on which to invoke the methods.
+   */
   private void invokeAll(Collection<Method> methods, String name, FSM fsm) {
     for (Method method : methods) {
       try {
@@ -82,6 +111,15 @@ public class MainGenerator {
     }
   }
 
+  /**
+   * Goes through all {@link osmo.tester.annotation.Transition} tagged methods in the given test model object,
+   * invokes all associated {@link osmo.tester.annotation.Guard} tagged methods matching those transitions,
+   * returning the set of {@link osmo.tester.annotation.Transition} methods that have no guards returning a value
+   * of {@code false}.
+   *
+   * @param fsm Describes the test model.
+   * @return The list of enabled {@link osmo.tester.annotation.Transition} methods.
+   */
   private List<FSMTransition> getEnabled(FSM fsm) {
     Object obj = fsm.getModel();
     Collection<FSMTransition> allTransitions = fsm.getTransitions();
@@ -105,6 +143,12 @@ public class MainGenerator {
     return enabled;
   }
 
+  /**
+   * Executes the given transition on the given model.
+   *
+   * @param fsm The model on which to execute the transition.
+   * @param transition  The transition to be executed.
+   */
   public void execute(FSM fsm, FSMTransition transition) {
     Method method = transition.getTransition();
     try {
@@ -115,7 +159,7 @@ public class MainGenerator {
     testLog.add(transition);
   }
 
-  public TestLog getTestLog() {
+  public TestSuite getTestLog() {
     return testLog;
   }
 }

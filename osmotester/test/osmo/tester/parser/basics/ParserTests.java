@@ -2,7 +2,6 @@ package osmo.tester.parser.basics;
 
 import org.junit.Before;
 import org.junit.Test;
-import osmo.tester.generator.testlog.TestLog;
 import osmo.tester.log.Logger;
 import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;

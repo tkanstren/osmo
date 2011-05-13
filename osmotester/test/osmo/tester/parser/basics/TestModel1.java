@@ -6,9 +6,9 @@ import osmo.tester.annotation.Before;
 import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.annotation.Guard;
 import osmo.tester.annotation.RequirementsField;
-import osmo.tester.annotation.TestLogField;
+import osmo.tester.annotation.TestSuiteField;
 import osmo.tester.annotation.Transition;
-import osmo.tester.generator.testlog.TestLog;
+import osmo.tester.generator.testsuite.TestSuite;
 import osmo.tester.model.Requirements;
 
 /**
@@ -17,10 +17,10 @@ import osmo.tester.model.Requirements;
 public class TestModel1 {
   @RequirementsField
   private Requirements requirements = new Requirements();
-  @TestLogField
-  private TestLog history = null;
+  @TestSuiteField
+  private TestSuite history = null;
 
-  public TestLog getHistory() {
+  public TestSuite getHistory() {
     return history;
   }
 

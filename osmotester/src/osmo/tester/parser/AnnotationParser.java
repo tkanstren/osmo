@@ -1,14 +1,18 @@
 package osmo.tester.parser;
 
-import osmo.tester.model.FSM;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 /**
+ * The base interface for parsing annotations. The {@link MainParser} class maps annotations by their type to
+ * specific parsers and calls a matching parser that implements this interface. This specific parser object is then
+ * expected to update the underlying {@link osmo.tester.model.FSM} representation according to the information
+ * encoded in the annotation.
+ *
  * @author Teemu Kanstren
  */
 public interface AnnotationParser {
+  /**
+   * Called to parse the given information for this annotation.
+   *
+   * @param parameters The information for the annotation parser.
+   */
   public void parse(ParserParameters parameters);
 }

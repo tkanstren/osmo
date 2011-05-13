@@ -1,19 +1,27 @@
 package osmo.tester.log;
 
 import java.io.IOException;
-import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.SimpleFormatter;
 
 /**
+ * The main class used to create log files describing OSMOTester behaviour.
+ * It is intended to encapsulate logging functionality without requiring external configuration files or
+ * external 
+ *
  * @author Teemu Kanstren
  */
 public class Logger {
+  /** We delegate to the JDK logging interface. */
   private java.util.logging.Logger logger;
+  /** When set to true, debug information will be printed to log file/console. */
   public static boolean debug = false;
 
+  /**
+   * Constructor.
+   *
+   * @param clazz The class for which logging is performed.
+   */
   public Logger(Class clazz) {
     String name = "";
     String p = clazz.getPackage().getName();
@@ -47,11 +55,22 @@ public class Logger {
     }
   }
 
+  /**
+   * Prints debug level messages. If debug level is not enabled, nothing is printed.
+   *
+   * @param msg The mesage to be printed.
+   */
   public void debug(String msg) {
 //    System.out.println("hello:"+msg);
     logger.fine(msg);
   }
 
+  /**
+   * Prints error messages, including exception stacktrace.
+   *
+   * @param msg The error message to print.
+   * @param e The exception to print.
+   */
   public void error(String msg, Exception e) {
     logger.log(Level.SEVERE, msg, e);
   }
