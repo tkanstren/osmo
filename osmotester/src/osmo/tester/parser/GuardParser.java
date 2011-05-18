@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 
 /**
  * Parses {@link Guard} annotations from the given model object.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class GuardParser implements AnnotationParser {

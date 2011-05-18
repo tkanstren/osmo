@@ -12,6 +12,8 @@ import osmo.tester.generator.testsuite.TestSuite;
 import osmo.tester.model.Requirements;
 
 /**
+ *
+ * 
  * @author Teemu Kanstren
  */
 public class TestModel1 {

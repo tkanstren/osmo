@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * This interface defines the algorithms used for test generation.
- *
+ * 
  * @author Teemu Kanstren
  */
 public interface GenerationAlgorithm {

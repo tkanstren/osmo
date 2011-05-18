@@ -9,7 +9,7 @@ import java.util.Random;
  * A simple strategy that takes a probability threshold for stopping test generation.
  * The probability needs to be between 0..1 where 1 means the generation is never stopped
  * and 0 means the generation is always stopped.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class ProbabilityStrategy implements ExitStrategy {

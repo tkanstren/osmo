@@ -10,7 +10,7 @@ import java.util.Collection;
  * These are identified in the model object from the {@link osmo.tester.annotation.Transition} annotations.
  * This includes the method to execute the test step (and generate scripts, etc.) and also
  * the {@link osmo.tester.annotation.Guard} methods that define when the transition is allowed to be performed.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class FSMTransition {

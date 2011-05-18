@@ -4,7 +4,7 @@ import osmo.tester.generator.testsuite.TestSuite;
 
 /**
  * This interface defines the strategy for when test suite or test case generation is stopped.
- *
+ * 
  * @author Teemu Kanstren
  */
 public interface ExitStrategy {

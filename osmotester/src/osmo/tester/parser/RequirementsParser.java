@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 
 /**
  * Parses {@link RequirementsField} annotations from the given model object.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class RequirementsParser implements AnnotationParser {

@@ -5,7 +5,7 @@ import osmo.tester.generator.testsuite.TestSuite;
 /**
  * A simple strategy to stop test case generation when a number of test steps has been generated,
  * or to stop test suite generation when a number of test cases in the suite has been generated.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class LengthStrategy implements ExitStrategy {

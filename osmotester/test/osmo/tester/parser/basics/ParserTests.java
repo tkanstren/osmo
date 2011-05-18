@@ -10,6 +10,8 @@ import osmo.tester.parser.MainParser;
 import static junit.framework.Assert.*;
 
 /**
+ *
+ *
  * @author Teemu Kanstren
  */
 public class ParserTests {

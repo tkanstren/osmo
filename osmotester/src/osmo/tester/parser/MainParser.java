@@ -21,7 +21,7 @@ import java.util.Map;
  * The main parser that takes the given model object and parses it for specific registered annotations,
  * passes these to specific {@link AnnotationParser} implementations to update the {@link FSM} representation
  * accordign to the information for the specific annotation.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class MainParser {

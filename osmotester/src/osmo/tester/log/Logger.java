@@ -8,7 +8,7 @@ import java.util.logging.Level;
  * The main class used to create log files describing OSMOTester behaviour.
  * It is intended to encapsulate logging functionality without requiring external configuration files or
  * external 
- *
+ * 
  * @author Teemu Kanstren
  */
 public class Logger {

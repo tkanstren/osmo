@@ -9,7 +9,7 @@ import java.util.Collections;
 /**
  * Describes a single test step in a test case.
  * Difference to {@link FSMTransition} is that this includes the runtime information such as covered requirements.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class TestStep {

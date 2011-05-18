@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Describes the test suite being generated.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class TestSuite {
