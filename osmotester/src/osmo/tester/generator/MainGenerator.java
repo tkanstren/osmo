@@ -16,7 +16,7 @@ import java.util.List;
  * The main test generator class.
  * Takes as input the finite state machine model parsed by {@link osmo.tester.parser.MainParser}.
  * Runs test generation on this model using the defined algorithms, exit strategies, etc.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class MainGenerator {

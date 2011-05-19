@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * This class describes a single test case and all test steps that it contains.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class TestCase {

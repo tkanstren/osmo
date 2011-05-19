@@ -1,3 +1,4 @@
+
 <project name="osmo-tester" default="jar" basedir=".">
   <property environment="env"/>
   <property name="prod-src" value="src"/>

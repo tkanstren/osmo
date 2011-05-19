@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
  * changing parameter set inside one object.
  * Also allows for optimizing parameter object creation by reusing the objects and setting only changed fields
  * (e.g. method, annotation).
- *
+ * 
  * @author Teemu Kanstren
  */
 public class ParserParameters {

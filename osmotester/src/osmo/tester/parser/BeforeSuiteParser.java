@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 /**
  * Parses {@link BeforeSuite} annotations from the given model object.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class BeforeSuiteParser implements AnnotationParser {

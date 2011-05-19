@@ -19,7 +19,7 @@ import java.lang.annotation.RetentionPolicy;
  * @see osmo.tester.generator.testsuite.TestSuite
  *
  * @author Teemu Kanstren
- */
+ */ 
 //TODO: add tests for someone having set the testsuite object to non-null value+wrong data type
 //TODO: check what constraints can be set on an annotation (only on field, only of specific type..)
 @Retention(RetentionPolicy.RUNTIME)

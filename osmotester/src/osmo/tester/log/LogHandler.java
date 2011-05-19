@@ -8,7 +8,7 @@ import java.util.logging.LogRecord;
  * Handles writing the log to an actual output stream.
  * Currently only System.out but others can also be easily supported.
  * Part of the required components for the JDK logging service.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class LogHandler extends Handler {

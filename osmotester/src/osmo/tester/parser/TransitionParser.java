@@ -6,7 +6,7 @@ import osmo.tester.model.FSMTransition;
 
 /**
  * Parses {@link Transition} annotations from the given model object.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class TransitionParser implements AnnotationParser {

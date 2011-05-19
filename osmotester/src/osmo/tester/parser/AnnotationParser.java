@@ -5,7 +5,7 @@ package osmo.tester.parser;
  * specific parsers and calls a matching parser that implements this interface. This specific parser object is then
  * expected to update the underlying {@link osmo.tester.model.FSM} representation according to the information
  * encoded in the annotation.
- *
+ * 
  * @author Teemu Kanstren
  */
 public interface AnnotationParser {

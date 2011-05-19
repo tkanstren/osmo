@@ -7,7 +7,7 @@ import java.util.logging.LogRecord;
 
 /**
  * Defines the format of the log file. Used by the JDK logging interface.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class LogFormatter extends Formatter {

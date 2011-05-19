@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Represents the given model object in terms of a finite state machine (FSM).
  * Produced by the parser and used by the generator to create actual test cases.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class FSM {

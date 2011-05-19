@@ -13,7 +13,7 @@ import java.util.HashSet;
  * covered in which test case and test step. A requirement is defined as a string that is expected to be both its
  * unique identifier and expressive enough to describe the actual intent of the requirement for the user to be able
  * to understand what it is.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class Requirements {

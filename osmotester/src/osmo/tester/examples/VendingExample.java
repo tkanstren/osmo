@@ -16,7 +16,7 @@ import osmo.tester.generator.testsuite.TestSuite;
  * When 100 cents inserted the "vend" transition can be taken.
  * When "vend" is taken, number of coins is reset to 0 and a bottle is deducted from the number of available bottles.
  * When there are only 0 bottles left, all states are disabled.
- *
+ * 
  * @author Teemu Kanstren
  */
 public class VendingExample {
