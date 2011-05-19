@@ -93,4 +93,6 @@
       </packageset>
     </javadoc>
   </target>
+
+  <target name="jenkins" depends="test, javadocs"/>
 </project>
