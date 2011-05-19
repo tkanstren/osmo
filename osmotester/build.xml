@@ -1,4 +1,3 @@
-
 <project name="osmo-tester" default="jar" basedir=".">
   <property environment="env"/>
   <property name="prod-src" value="src"/>
@@ -9,6 +8,7 @@
   <property name="test-report" value="${main-output}/junit-report"/>
   <property name="instrumented-dest" value="${main-output}/instrumented"/>
   <property name="coverage-dir" value="${main-output}/coverage"/>
+  <property name="javadoc-dir" value="${main-output}/docs/api"/>
   <property name="cobertura.home" value="${env.COBERTURA_HOME}"/>
 
   <path id="class.path">
@@ -41,11 +41,13 @@
     <mkdir dir="${test-report}"/>
     <mkdir dir="${instrumented-dest}"/>
     <mkdir dir="${coverage-dir}"/>
+    <mkdir dir="${javadoc-dir}"/>
   </target>
 
   <target name="compile" depends="init">
     <echo message="Compiling production..."/>
-    <javac source="1.5" target="1.5" debug="true" classpathref="class.path" srcdir="${prod-src}" destdir="${prod-dest}"/>
+    <javac source="1.5" target="1.5" debug="true" classpathref="class.path" srcdir="${prod-src}"
+           destdir="${prod-dest}"/>
     <echo message="Compiling tests..."/>
     <javac source="1.5" target="1.5" classpathref="class.path" srcdir="${test-src}" destdir="${test-dest}"/>
   </target>
@@ -84,4 +86,11 @@
     <cobertura-report format="html" srcdir="${prod-src}" destdir="${coverage-dir}/html"/>
   </target>
 
+  <target name="javadocs">
+    <javadoc destdir="${javadoc-dir}" author="true" version="true" use="true" windowtitle="OSMO API">
+      <packageset dir="src" defaultexcludes="yes">
+        <include name="osmo/tester/**"/>
+      </packageset>
+    </javadoc>
+  </target>
 </project>
