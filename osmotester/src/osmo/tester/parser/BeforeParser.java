@@ -14,10 +14,11 @@ public class BeforeParser implements AnnotationParser {
   private static Logger log = new Logger(BeforeParser.class);
 
   @Override
-  public void parse(ParserParameters parameters) {
+  public String parse(ParserParameters parameters) {
     Before before = (Before) parameters.getAnnotation();
     Method method = parameters.getMethod();
     log.debug("found @before method:" +method.getName());
     parameters.getFsm().addBefore(method);
+    return "";
   }
 }

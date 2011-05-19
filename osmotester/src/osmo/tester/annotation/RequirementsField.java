@@ -1,7 +1,9 @@
 package osmo.tester.annotation;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * This annotation describes the requirements field in the model object passed to the OSMOTester.generate() method.
@@ -14,8 +16,7 @@ import java.lang.annotation.RetentionPolicy;
  *
  * @author Teemu Kanstren
  */
-//TODO: add check that there is at most one requirements field (+test it)
-//TODO: add check that the requirements field is of the expected type (+test it)
 @Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
 public @interface RequirementsField {
 }

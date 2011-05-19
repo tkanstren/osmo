@@ -29,7 +29,6 @@ public class LengthTests {
     tester.setSuiteStrategy(testStrategy);
     tester.generate();
     TestSuite testLog = calculator.getHistory();
-    //TODO: assert statements for wider set of constraints
     List<TestCase> history = testLog.getHistory();
     assertEquals("Number of tests generated", expectedLength, history.size());
     for (TestCase test : history) {

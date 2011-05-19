@@ -1,4 +1,4 @@
-package osmo.tester.basics;
+package osmo.tester.parser;
 
 import osmo.tester.annotation.After;
 import osmo.tester.annotation.AfterSuite;

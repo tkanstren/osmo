@@ -52,11 +52,11 @@ public class MainParser {
     log.debug("parsing");
     FSM fsm = new FSM(obj);
     //first we check any annotated fields that are relevant
-    parseFields(fsm, obj);
+    String errors = parseFields(fsm, obj);
     //next we check any annotated methods that are relevant
-    parseMethods(fsm, obj);
+    errors += parseMethods(fsm, obj);
     //finally we check that the generated FSM itself is valid
-    fsm.check();
+    fsm.check(errors);
     return fsm;
   }
 
@@ -66,7 +66,7 @@ public class MainParser {
    * @param fsm The test model object to be updated according to the parsed information.
    * @param obj The model object that contains the annotations and fields/executable methods for test generation.
    */
-  private void parseFields(FSM fsm, Object obj) {
+  private String parseFields(FSM fsm, Object obj) {
     //first we find all declared fields of any scope and type (private, protected, ...)
     Field[] fields = obj.getClass().getDeclaredFields();
     log.debug("fields "+fields.length);
@@ -74,6 +74,7 @@ public class MainParser {
     ParserParameters parameters = new ParserParameters();
     parameters.setFsm(fsm);
     parameters.setModel(obj);
+    String errors = "";
     //now we loop through all fields defined in the model object
     for (Field field : fields) {
       log.debug("field:"+field);
@@ -93,9 +94,10 @@ public class MainParser {
         //set the annotation itself as a parameter to the used parser object
         parameters.setAnnotation(annotation);
         //and finally parse it
-        parser.parse(parameters);
+        errors += parser.parse(parameters);
       }
     }
+    return errors;
   }
 
   /**
@@ -104,7 +106,7 @@ public class MainParser {
    * @param fsm The test model object to be updated according to the parsed information.
    * @param obj The model object that contains the annotations and fields/executable methods for test generation.
    */
-  private void parseMethods(FSM fsm, Object obj) {
+  private String parseMethods(FSM fsm, Object obj) {
     //first we get all methods defined in the test model object (also all scopes -> private, protected, ...)
     Method[] methods = obj.getClass().getMethods();
     log.debug("methods "+methods.length);
@@ -113,6 +115,7 @@ public class MainParser {
     ParserParameters parameters = new ParserParameters();
     parameters.setFsm(fsm);
     parameters.setModel(obj);
+    String errors = "";
     //loop through all the methods defined in the given object
     for (Method method : methods) {
       log.debug("method:"+method);
@@ -131,8 +134,9 @@ public class MainParser {
         //set the annotation itself as a parameter to the used parser object
         parameters.setAnnotation(annotation);
         //and finally parse it
-        parser.parse(parameters);
+        errors += parser.parse(parameters);
       }
     }
+    return errors;
   }
 }

@@ -1,7 +1,9 @@
 package osmo.tester.annotation;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * This annotation describes a field in the model object for providing access to the test generation history
@@ -20,8 +22,7 @@ import java.lang.annotation.RetentionPolicy;
  *
  * @author Teemu Kanstren
  */ 
-//TODO: add tests for someone having set the testsuite object to non-null value+wrong data type
-//TODO: check what constraints can be set on an annotation (only on field, only of specific type..)
 @Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
 public @interface TestSuiteField {
 }

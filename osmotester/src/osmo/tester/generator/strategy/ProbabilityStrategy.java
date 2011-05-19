@@ -25,8 +25,10 @@ public class ProbabilityStrategy implements ExitStrategy {
    * @param threshold The threshold value, if this is exceeded in evaluation, generation is stopped.
    */
   public ProbabilityStrategy(double threshold) {
+    if (threshold < 0 || threshold > 1) {
+      throw new IllegalArgumentException(ProbabilityStrategy.class.getSimpleName()+" threshold must be between 0 and 1. Was "+threshold+".");
+    }
     this.threshold = threshold;
-    //TODO: check that threshold is between 0..1
   }
 
   @Override

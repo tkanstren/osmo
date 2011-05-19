@@ -1,7 +1,9 @@
 package osmo.tester.annotation;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * This annotation defines a transition to be taken by the generator when using the test model to generate tests.
@@ -21,6 +23,7 @@ import java.lang.annotation.RetentionPolicy;
  * @author Teemu Kanstren
  */
 @Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
 public @interface Transition {
   String value();
 }

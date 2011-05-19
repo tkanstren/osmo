@@ -13,6 +13,7 @@ public interface AnnotationParser {
    * Called to parse the given information for this annotation.
    *
    * @param parameters The information for the annotation parser.
+   * @return Error messages from the parser.
    */
-  public void parse(ParserParameters parameters);
+  public String parse(ParserParameters parameters);
 }

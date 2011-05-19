@@ -76,14 +76,13 @@ public class FSM {
    * -Check that each @Guard returns a boolean value.
    * -Check that no @Guard method has a return value.
    */
-  public void check() {
+  public void check(String errors) {
     log.debug("Checking FSM validity");
     if (requirements == null) {
       log.debug("No requirements object defined. Creating new.");
       //user the setRequirements method to also initialize the requirements object missing state
       setRequirements(new Requirements());
     }
-    String errors = "";
     for (FSMTransition transition : transitions.values()) {
       Method method = transition.getTransition();
       String name = transition.getName();

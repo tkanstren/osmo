@@ -1,11 +1,11 @@
-package osmo.tester.basics;
+package osmo.tester.parser;
 
 import org.junit.Before;
 import org.junit.Test;
 import osmo.tester.log.Logger;
 import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
-import osmo.tester.parser.MainParser;
+import osmo.tester.model.Requirements;
 
 import static junit.framework.Assert.*;
 
@@ -46,7 +46,9 @@ public class ParserTests {
       fail("Should throw exception");
     } catch (Exception e) {
       String msg = e.getMessage();
-      String expected = "Invalid FSM:\n" + "Guard without transition:foo\n";
+      String expected = "Invalid FSM:\n" +
+              "Only one @RequirementsField allowed in the model.\n" +
+              "Guard without transition:foo\n";
       assertEquals(expected, msg);
     }
   }
@@ -59,7 +61,10 @@ public class ParserTests {
       fail("Should throw exception");
     } catch (Exception e) {
       String msg = e.getMessage();
-      String expected = "Invalid FSM:\n" + "Invalid return type for guard (\"hello()\"):class java.lang.String.\n";
+      String expected = "Invalid FSM:\n" +
+              "@RequirementsField class must be of type "+ Requirements.class.getName()+". Was "+String.class.getName()+".\n"+
+              "@TestSuiteField class must be of type osmo.tester.generator.testsuite.TestSuite. Was java.lang.String.\n"+
+              "Invalid return type for guard (\"hello()\"):class java.lang.String.\n";
       assertEquals(expected, msg);
     }
   }
@@ -71,8 +76,13 @@ public class ParserTests {
       FSM fsm = parser.parse(new TestModel4());
       fail("Should throw exception");
     } catch (Exception e) {
+      //note that this exception checking will swallow real errors so it can be useful to print them..
+//      e.printStackTrace();
       String msg = e.getMessage();
-      String expected = "Invalid FSM:\n" + "Guard methods are not allowed to have parameters: \"hello()\" has 1 parameters.\n";
+      String expected = "Invalid FSM:\n" +
+              "@RequirementsField value was null, which is not allowed.\n"+
+              "@TestSuiteField value was pre-initialized in the model, which is not allowed.\n"+
+              "Guard methods are not allowed to have parameters: \"hello()\" has 1 parameters.\n";
       assertEquals(expected, msg);
     }
   }
