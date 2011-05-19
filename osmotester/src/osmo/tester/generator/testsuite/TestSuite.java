@@ -83,6 +83,10 @@ public class TestSuite {
    * @return The number of test steps in the current test case.
    */
   public int currentSteps() {
+    //current is null before starting the first test case
+    if (current == null) {
+      return 0;
+    }
     return current.getSteps().size();
   }
 }

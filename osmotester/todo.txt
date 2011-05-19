@@ -5,7 +5,6 @@
 -transition requirement("name")
 -read requirement list from code
 -kattavuuksia, onko vaatimus katettu otetaanko mukaan, onko transitiot katettu, otetaanko mukaan? tuoko uutta? otetaanko mukaan?
--julkaisua?
 -input ja output arvojen huomiointi
 -haarakohtien käyntimäärä, coverage guided, tämän kautta optimointi
 -jos on käyty jossain tilassa niin käydään toisessa joka on vapaa, muuten random
@@ -20,4 +19,4 @@
 -logien eri tasot, ei vain debuggi
 -webbisivu jossa issue tracker jne
 -@Oracle, @AllGuard, @CommonGuard, @EndCondition
-
+-Jos oracle failaa tai testi failaa niin pitääkö koko setti keskeyttää vai ei? parametri

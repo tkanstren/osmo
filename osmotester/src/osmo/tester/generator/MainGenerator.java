@@ -53,10 +53,10 @@ public class MainGenerator {
     //TODO: check sanity of testSize, steps, etc.
     log.debug("Starting test suite generation");
     beforeSuite(fsm);
-    while (!suiteStrategy.exitNow(testLog, false)) {
+    while (!suiteStrategy.exitNow(testLog, true)) {
       log.debug("Starting new test generation");
       beforeTest(fsm);
-      while (!testStrategy.exitNow(testLog, true)) {
+      while (!testStrategy.exitNow(testLog, false)) {
         List<FSMTransition> enabled = getEnabled(fsm);
         //TODO: throw exception if no suitable one available + add tests
         FSMTransition next = algorithm.choose(testLog, enabled);

@@ -1,6 +1,7 @@
 package osmo.tester.generator.strategy;
 
 import osmo.tester.generator.testsuite.TestSuite;
+import osmo.tester.log.Logger;
 
 /**
  * A simple strategy to stop test case generation when a number of test steps has been generated,
@@ -9,7 +10,8 @@ import osmo.tester.generator.testsuite.TestSuite;
  * @author Teemu Kanstren
  */
 public class LengthStrategy implements ExitStrategy {
-  /** The stopping threshold. */
+  private static Logger log = new Logger(LengthStrategy.class);
+   /** The stopping threshold. */
   private final int length;
 
   /**
@@ -26,6 +28,7 @@ public class LengthStrategy implements ExitStrategy {
 
   @Override
   public boolean exitNow(TestSuite testLog, boolean evaluateSuite) {
+    log.debug("e:"+evaluateSuite+" h:"+testLog.getHistory().size()+" c:"+testLog.currentSteps());
     if (evaluateSuite) {
       return testLog.getHistory().size() >= length;
     }
