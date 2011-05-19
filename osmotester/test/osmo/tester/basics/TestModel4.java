@@ -1,4 +1,4 @@
-package osmo.tester.parser.basics;
+package osmo.tester.basics;
 
 import osmo.tester.annotation.Guard;
 import osmo.tester.annotation.Transition;
@@ -6,10 +6,10 @@ import osmo.tester.annotation.Transition;
 /**
  * @author Teemu Kanstren
  */
-public class TestModel3 {
+public class TestModel4 {
   @Guard("foo")
-  public String hello() {
-    return "";
+  public boolean hello(String foo) {
+    return false;
   }
 
   @Transition("foo")

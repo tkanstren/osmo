@@ -1,4 +1,4 @@
-package osmo.tester.parser.basics;
+package osmo.tester.basics;
 
 import osmo.tester.annotation.Guard;
 
