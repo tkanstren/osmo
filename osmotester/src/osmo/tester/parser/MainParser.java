@@ -109,8 +109,8 @@ public class MainParser {
   private String parseMethods(FSM fsm, Object obj) {
     //first we get all methods defined in the test model object (also all scopes -> private, protected, ...)
     Method[] methods = obj.getClass().getMethods();
+    //there are always some methods inherited from java.lang.Object so we checking them here is pointless. FSM.check will do it
     log.debug("methods "+methods.length);
-    //TODO: check that there are some methods to execute
     //construct and store common parameters first for all method parsers, update the rest each time
     ParserParameters parameters = new ParserParameters();
     parameters.setFsm(fsm);

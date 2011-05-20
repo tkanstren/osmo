@@ -1,15 +1,11 @@
--before/after contract checking
--tests for execution
 -traceability matrix, which test case covers which requirement
 -requirements function description
--transition requirement("name")
 -read requirement list from code
 -kattavuuksia, onko vaatimus katettu otetaanko mukaan, onko transitiot katettu, otetaanko mukaan? tuoko uutta? otetaanko mukaan?
 -input ja output arvojen huomiointi
 -haarakohtien käyntimäärä, coverage guided, tämän kautta optimointi
 -jos on käyty jossain tilassa niin käydään toisessa joka on vapaa, muuten random
 -skripterin tekeminen, jota voi parametrisoida
--@TestLog annotaation lisääminen ja uudelleen nimeäminen
 -logien kirjoittelu tarkemmiksi, eli että mitä testejä on luomassa jne
 -testoraclet omaan tilaan: eli @Oracle ja sille ehkä guardi? tyyliin joka tilan jälkeen, annettujen tilojen jälkeen, tietyillä ehdoilla?
 -mahdollisuus määrittää itse milloin testien generointi lopetetaan, tyyliin bottles == 0
@@ -20,3 +16,5 @@
 -webbisivu jossa issue tracker jne
 -@Oracle, @AllGuard, @CommonGuard, @EndCondition
 -Jos oracle failaa tai testi failaa niin pitääkö koko setti keskeyttää vai ei? parametri
+-mallien jako osamalleihin ja mallien lisääminen tyyliin addModel()
+-generoinnin parametrien raportointi testikohtaisesti

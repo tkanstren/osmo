@@ -21,7 +21,7 @@ public class FSMTransition {
   /** The method that needs to be invoked when the transition should be actually taken. */
   private Method transition = null;
 
-  protected FSMTransition(String name) {
+  public FSMTransition(String name) {
     this.name = name;
   }
 

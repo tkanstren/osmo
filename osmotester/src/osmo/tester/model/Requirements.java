@@ -63,6 +63,10 @@ public class Requirements {
     return null;
   }
 
+  public boolean isCovered(String requirement) {
+    return covered.contains(requirement);
+  }
+
   /**
    * Creates a string representation of the set of covered requirements vs the set of all defined requirements.
    *

@@ -22,7 +22,7 @@ import java.util.List;
 public class MainGenerator {
   private static Logger log = new Logger(MainGenerator.class);
   /** Test generation history. Initialized from the given model to enable sharing the object with model and generator. */
-  private TestSuite testLog = null;
+  private TestSuite suite = null;
   /** The set of enabled transitions in the current state is passed to this algorithm to pick one to execute. */
   private final GenerationAlgorithm algorithm;
   /** Defines when test suite generation should be stopped. Invoked between each test case. */
@@ -49,17 +49,15 @@ public class MainGenerator {
    * @param fsm Describes the test model in an FSM format.
    */
   public void generate(FSM fsm) {
-    testLog = fsm.getTestSuite();
-    //TODO: check sanity of testSize, steps, etc.
+    suite = fsm.getTestSuite();
     log.debug("Starting test suite generation");
     beforeSuite(fsm);
-    while (!suiteStrategy.exitNow(testLog, true)) {
+    while (!suiteStrategy.exitNow(suite, true)) {
       log.debug("Starting new test generation");
       beforeTest(fsm);
-      while (!testStrategy.exitNow(testLog, false)) {
+      while (!testStrategy.exitNow(suite, false)) {
         List<FSMTransition> enabled = getEnabled(fsm);
-        //TODO: throw exception if no suitable one available + add tests
-        FSMTransition next = algorithm.choose(testLog, enabled);
+        FSMTransition next = algorithm.choose(suite, enabled);
         log.debug("Taking transition "+next.getName());
         execute(fsm, next);
       }
@@ -82,7 +80,7 @@ public class MainGenerator {
 
   private void beforeTest(FSM fsm) {
     //update history
-    testLog.startTest();
+    suite.startTest();
     Collection<Method> befores = fsm.getBefores();
     invokeAll(befores, "@Before", fsm);
   }
@@ -91,7 +89,7 @@ public class MainGenerator {
     Collection<Method> afters = fsm.getAfters();
     invokeAll(afters, "@After", fsm);
     //update history
-    testLog.endTest();
+    suite.endTest();
   }
 
   /**
@@ -150,16 +148,17 @@ public class MainGenerator {
    * @param transition  The transition to be executed.
    */
   public void execute(FSM fsm, FSMTransition transition) {
+    //we have to add this first or it will produce failures..
+    suite.add(transition);
     Method method = transition.getTransition();
     try {
       method.invoke(fsm.getModel());
     } catch (Exception e) {
       throw new RuntimeException("Exception while running transition ('"+transition.getName()+"'):", e);
     }
-    testLog.add(transition);
   }
 
-  public TestSuite getTestLog() {
-    return testLog;
+  public TestSuite getSuite() {
+    return suite;
   }
 }

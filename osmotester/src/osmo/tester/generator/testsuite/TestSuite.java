@@ -27,12 +27,9 @@ public class TestSuite {
    * End the current test case and moves it to the suite "history".
    */
   public void endTest() {
-    //TODO: check that current is non-null, add tests
     history.add(current);
     current = null;
   }
-
-  //TODO: add checks that current is != null and test cases for adding new ones before starting them (after ending previous one)
 
   /**
    * Adds the given transition as a step into the current test case.

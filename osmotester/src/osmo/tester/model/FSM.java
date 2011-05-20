@@ -83,6 +83,9 @@ public class FSM {
       //user the setRequirements method to also initialize the requirements object missing state
       setRequirements(new Requirements());
     }
+    if (transitions.size() == 0) {
+      errors += "No transitions found in given model object. Model cannot be processed.\n";
+    }
     for (FSMTransition transition : transitions.values()) {
       Method method = transition.getTransition();
       String name = transition.getName();

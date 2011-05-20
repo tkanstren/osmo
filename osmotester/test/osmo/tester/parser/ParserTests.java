@@ -117,6 +117,21 @@ public class ParserTests {
     }
   }
 
+  @Test
+  public void noMethods() {
+    MainParser parser = new MainParser();
+    try {
+      FSM fsm = parser.parse(new Object());
+      fsm.check("");
+      fail("Should throw exception when no transition methods are available.");
+    } catch (Exception e) {
+      String msg = e.getMessage();
+      String expected = "Invalid FSM:\n" +
+              "No transitions found in given model object. Model cannot be processed.\n";
+      assertEquals(expected, msg);
+    }
+  }
+
   private void assertTransitionPresent(FSM fsm, String name, int guardCount) {
     FSMTransition transition = fsm.getTransition(name);
     assertNotNull("Transition '" + name + "' should be generated.", transition);
