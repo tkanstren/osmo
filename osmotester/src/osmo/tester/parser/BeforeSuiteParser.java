@@ -2,6 +2,7 @@ package osmo.tester.parser;
 
 import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.log.Logger;
+import osmo.tester.model.InvocationTarget;
 
 import java.lang.reflect.Method;
 
@@ -18,7 +19,7 @@ public class BeforeSuiteParser implements AnnotationParser {
     BeforeSuite before = (BeforeSuite) parameters.getAnnotation();
     Method method = parameters.getMethod();
     log.debug("found @BeforeSuite method:"+method.getName());
-    parameters.getFsm().addBeforeSuite(method);
+    parameters.getFsm().addBeforeSuite(new InvocationTarget(parameters));
     return "";
   }
 }

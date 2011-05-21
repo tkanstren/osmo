@@ -6,6 +6,7 @@ import osmo.tester.generator.testsuite.TestSuite;
 import osmo.tester.log.Logger;
 import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
+import osmo.tester.model.InvocationTarget;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class MainGenerator {
         List<FSMTransition> enabled = getEnabled(fsm);
         FSMTransition next = algorithm.choose(suite, enabled);
         log.debug("Taking transition "+next.getName());
-        execute(fsm, next);
+        execute(next);
         if (checkEndConditions(fsm)) {
           //stop this test case generation if any end condition returns true
           break;
@@ -79,41 +80,36 @@ public class MainGenerator {
    * @return true if current test case (not suite) generation should be stopped.
    */
   private boolean checkEndConditions(FSM fsm) {
-    Object obj = fsm.getModel();
-    Collection<Method> endConditions = fsm.getEndConditions();
-    for (Method ec : endConditions) {
-      try {
-        Boolean result = (Boolean)ec.invoke(obj);
-        if (result) {
-          return true;
-        }
-      } catch (Exception e) {
-        throw new RuntimeException("Failed to invoke guard method.", e);
+    Collection<InvocationTarget> endConditions = fsm.getEndConditions();
+    for (InvocationTarget ec : endConditions) {
+      Boolean result = (Boolean)ec.invoke("@EndCondition");
+      if (result) {
+        return true;
       }
     }
     return false;
   }
 
   private void beforeSuite(FSM fsm) {
-    Collection<Method> befores = fsm.getBeforeSuites();
-    invokeAll(befores, "@BeforeSuite", fsm);
+    Collection<InvocationTarget> befores = fsm.getBeforeSuites();
+    invokeAll(befores, "@BeforeSuite");
   }
 
   private void afterSuite(FSM fsm) {
-    Collection<Method> afters = fsm.getAfterSuites();
-    invokeAll(afters, "@AfterSuite", fsm);
+    Collection<InvocationTarget> afters = fsm.getAfterSuites();
+    invokeAll(afters, "@AfterSuite");
   }
 
   private void beforeTest(FSM fsm) {
     //update history
     suite.startTest();
-    Collection<Method> befores = fsm.getBefores();
-    invokeAll(befores, "@Before", fsm);
+    Collection<InvocationTarget> befores = fsm.getBefores();
+    invokeAll(befores, "@Before");
   }
 
   private void afterTest(FSM fsm) {
-    Collection<Method> afters = fsm.getAfters();
-    invokeAll(afters, "@After", fsm);
+    Collection<InvocationTarget> afters = fsm.getAfters();
+    invokeAll(afters, "@After");
     //update history
     suite.endTest();
   }
@@ -121,17 +117,11 @@ public class MainGenerator {
   /**
    * Invokes the given set of methods on the target test object.
    *
-   * @param methods The methods to be invoked.
-   * @param name  The annotation name describing the methods, used in error messages.
-   * @param fsm The model object on which to invoke the methods.
+   * @param targets The methods to be invoked.
    */
-  private void invokeAll(Collection<Method> methods, String name, FSM fsm) {
-    for (Method method : methods) {
-      try {
-        method.invoke(fsm.getModel());
-      } catch (Exception e) {
-        throw new RuntimeException("Error while calling "+name+" method ("+method.getName()+")", e);
-      }
+  private void invokeAll(Collection<InvocationTarget> targets, String type) {
+    for (InvocationTarget target : targets) {
+      target.invoke(type);
     }
   }
 
@@ -145,19 +135,14 @@ public class MainGenerator {
    * @return The list of enabled {@link osmo.tester.annotation.Transition} methods.
    */
   private List<FSMTransition> getEnabled(FSM fsm) {
-    Object obj = fsm.getModel();
     Collection<FSMTransition> allTransitions = fsm.getTransitions();
     List<FSMTransition> enabled = new ArrayList<FSMTransition>();
     enabled.addAll(allTransitions);
     for (FSMTransition transition : allTransitions) {
-      for (Method guard : transition.getGuards()) {
-        try {
-          Boolean result = (Boolean)guard.invoke(obj);
-          if (!result) {
-            enabled.remove(transition);
-          }
-        } catch (Exception e) {
-          throw new RuntimeException("Failed to invoke guard method.", e);
+      for (InvocationTarget guard : transition.getGuards()) {
+        Boolean result = (Boolean)guard.invoke("@Guard");
+        if (!result) {
+          enabled.remove(transition);
         }
       }
     }
@@ -170,19 +155,14 @@ public class MainGenerator {
   /**
    * Executes the given transition on the given model.
    *
-   * @param fsm The model on which to execute the transition.
    * @param transition  The transition to be executed.
    */
-  public void execute(FSM fsm, FSMTransition transition) {
+  public void execute(FSMTransition transition) {
     //we have to add this first or it will produce failures..
     suite.add(transition);
-    Method method = transition.getTransition();
-    try {
-      method.invoke(fsm.getModel());
-    } catch (Exception e) {
-      throw new RuntimeException("Exception while running transition ('"+transition.getName()+"'):", e);
-    }
-    invokeAll(transition.getOracles(), "@Oracle", fsm);
+    InvocationTarget target = transition.getTransition();
+    target.invoke("@Transition");
+    invokeAll(transition.getOracles(), "@Oracle");
   }
 
   public TestSuite getSuite() {

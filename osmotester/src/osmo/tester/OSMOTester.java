@@ -24,8 +24,8 @@ import java.util.Collection;
  * @author Teemu Kanstren
  */
 public class OSMOTester {
-  /** The test model itself, given by the user. */
-  private final Object modelObject;
+  /** The set of test model objects, given by the user. */
+  private final Collection<Object> modelObjects = new ArrayList<Object>();
   /** When do we stop generating the overall test suite? (stopping all test generation)*/
   private ExitStrategy suiteStrategy = new ProbabilityStrategy(0.95d);
   /** When do we stop generating individual tests and start a new one? */
@@ -41,7 +41,7 @@ public class OSMOTester {
    * @param modelObject The model object defined using the OSMOTester annotations.
    */
   public OSMOTester(Object modelObject) {
-    this.modelObject = modelObject;
+    modelObjects.add(modelObject);
   }
 
   /**
@@ -50,7 +50,7 @@ public class OSMOTester {
   public void generate() {
     MainGenerator generator = new MainGenerator(algorithm, suiteStrategy, testStrategy);
     MainParser parser = new MainParser();
-    FSM fsm = parser.parse(modelObject);
+    FSM fsm = parser.parse(modelObjects);
     generator.generate(fsm);
     System.out.println("generated " + fsm.getTestSuite().getHistory().size() + " tests.\n");
     System.out.println(fsm.getRequirements().printCoverage());
@@ -91,8 +91,9 @@ public class OSMOTester {
   public void setDebug(boolean debug) {
     Logger.debug = debug;
   }
-
+/*
   public void addListener(GenerationListener listener) {
     listeners.add(listener);
   }
+  */
 }

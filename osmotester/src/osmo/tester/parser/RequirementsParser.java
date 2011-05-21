@@ -11,16 +11,12 @@ import java.lang.reflect.Field;
  * @author Teemu Kanstren
  */
 public class RequirementsParser implements AnnotationParser {
-  private int count = 0;
+  private Requirements req = null;
 
   @Override
   public String parse(ParserParameters parameters) {
-    count++;
     String errors = "";
     String name = "@"+RequirementsField.class.getSimpleName();
-    if (count > 1) {
-      errors += "Only one "+name+" allowed in the model.\n";
-    }
     RequirementsField annotation = (RequirementsField) parameters.getAnnotation();
     try {
       Field field = parameters.getField();
@@ -37,7 +33,11 @@ public class RequirementsParser implements AnnotationParser {
         errors += name +" value was null, which is not allowed.\n";
         return errors;
       }
+      if (this.req != null && this.req != requirements) {
+        errors += "Only one "+name+" allowed in the model.\n";
+      }
       parameters.getFsm().setRequirements(requirements);
+      this.req = requirements;
     } catch (IllegalAccessException e) {
       throw new RuntimeException("Unable to parse/set "+name, e);
     }

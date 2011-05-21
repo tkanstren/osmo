@@ -2,6 +2,7 @@ package osmo.tester.parser;
 
 import osmo.tester.annotation.After;
 import osmo.tester.log.Logger;
+import osmo.tester.model.InvocationTarget;
 
 import java.lang.reflect.Method;
 
@@ -18,7 +19,7 @@ public class AfterParser implements AnnotationParser {
     After after = (After) parameters.getAnnotation();
     Method method = parameters.getMethod();
     log.debug("found @After method:"+method.getName());
-    parameters.getFsm().addAfter(method);
+    parameters.getFsm().addAfter(new InvocationTarget(parameters));
     return "";
   }
 }

@@ -3,6 +3,7 @@ package osmo.tester.parser;
 import osmo.tester.annotation.Transition;
 import osmo.tester.log.Logger;
 import osmo.tester.model.FSMTransition;
+import osmo.tester.model.InvocationTarget;
 
 /**
  * Parses {@link Transition} annotations from the given model object.
@@ -18,7 +19,7 @@ public class TransitionParser implements AnnotationParser {
     String name = t.value();
     log.debug("Found transition: "+name);
     FSMTransition transition = parameters.getFsm().createTransition(name);
-    transition.setTransition(parameters.getMethod());
+    transition.setTransition(new InvocationTarget(parameters));
     return "";
   }
 }

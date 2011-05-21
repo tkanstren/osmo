@@ -17,41 +17,41 @@ public class FSMTransition {
   /** Name of the transition, from @Transition("name"). */
   private final String name;
   /** The set of guards defining when this transition can be taken. */
-  private final Collection<Method> guards = new ArrayList<Method>();
+  private final Collection<InvocationTarget> guards = new ArrayList<InvocationTarget>();
   /** The method that needs to be invoked when the transition should be actually taken. */
-  private Method transition = null;
+  private InvocationTarget transition = null;
   /** The set of oracles to be evaluated after this transition has been taken. */
-  private final Collection<Method> oracles = new ArrayList<Method>();
+  private final Collection<InvocationTarget> oracles = new ArrayList<InvocationTarget>();
 
   public FSMTransition(String name) {
     this.name = name;
   }
 
-  public void addGuard(Method method) {
-    guards.add(method);
+  public void addGuard(InvocationTarget target) {
+    guards.add(target);
   }
 
-  public void addOracle(Method method) {
-    oracles.add(method);
+  public void addOracle(InvocationTarget target) {
+    oracles.add(target);
   }
 
   public String getName() {
     return name;
   }
 
-  public Collection<Method> getGuards() {
+  public Collection<InvocationTarget> getGuards() {
     return guards;
   }
 
-  public Method getTransition() {
+  public InvocationTarget getTransition() {
     return transition;
   }
 
-  public void setTransition(Method transition) {
+  public void setTransition(InvocationTarget transition) {
     this.transition = transition;
   }
 
-  public Collection<Method> getOracles() {
+  public Collection<InvocationTarget> getOracles() {
     return oracles;
   }
 }

@@ -7,6 +7,9 @@ import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
 import osmo.tester.model.Requirements;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import static junit.framework.Assert.*;
 
 /**
@@ -36,7 +39,6 @@ public class ParserTests {
     assertEquals("Number of end conditions", 2, fsm.getEndConditions().size());
     assertNotNull("Should have TestLog set", model.getHistory());
     assertNotNull("Should have Requirements set", fsm.getRequirements());
-    Thread.sleep(1000);
   }
 
 
@@ -122,6 +124,33 @@ public class ParserTests {
               "Invalid return type for guard (\"listCheck()\"):class java.lang.String.\n";
       assertEquals(expected, msg);
     }
+  }
+
+  @Test
+  public void testPartialModels() {
+    MainParser parser = new MainParser();
+    Requirements req = new Requirements();
+    PartialModel1 model1 = new PartialModel1(req);
+    PartialModel2 model2 = new PartialModel2(req);
+    Collection<Object> models = new ArrayList<Object>();
+    models.add(model1);
+    models.add(model2);
+    FSM fsm = parser.parse(models);
+    assertEquals("Number of @Before methods", 2, fsm.getBefores().size());
+    assertEquals("Number of @BeforeSuite methods", 1, fsm.getBeforeSuites().size());
+    assertEquals("Number of @After methods", 2, fsm.getAfters().size());
+    assertEquals("Number of @AfterSuite methods", 1, fsm.getAfterSuites().size());
+    //these also test for the correct number of guards
+    assertTransitionPresent(fsm, "hello", 0, 2);
+    assertTransitionPresent(fsm, "world", 3, 1);
+    assertTransitionPresent(fsm, "epixx", 2, 3);
+    assertEquals("Number of end conditions", 2, fsm.getEndConditions().size());
+    assertNotNull("Should have TestLog set", model1.getHistory());
+    assertNotNull("Should have TestLog set", model2.getHistory());
+    String s = "";
+    String s1 = "";
+    assertTrue("TestLog should be the same in partial models", model1.getHistory() == model2.getHistory());
+    assertNotNull("Should have Requirements set", fsm.getRequirements());
   }
 
   @Test

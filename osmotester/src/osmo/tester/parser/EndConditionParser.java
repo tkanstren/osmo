@@ -3,6 +3,7 @@ package osmo.tester.parser;
 import osmo.tester.annotation.After;
 import osmo.tester.annotation.EndCondition;
 import osmo.tester.log.Logger;
+import osmo.tester.model.InvocationTarget;
 
 import java.lang.reflect.Method;
 
@@ -17,7 +18,7 @@ public class EndConditionParser implements AnnotationParser {
     EndCondition ec = (EndCondition) parameters.getAnnotation();
     Method method = parameters.getMethod();
     log.debug("found @EndCondition method:"+method.getName());
-    parameters.getFsm().addEndCondition(method);
+    parameters.getFsm().addEndCondition(new InvocationTarget(parameters));
     return "";
   }
 }

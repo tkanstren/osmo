@@ -16,6 +16,8 @@ import osmo.tester.model.FSM;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,19 +48,34 @@ public class MainParser {
   }
 
   /**
+   * This delegates to the other constructor. Mainly used for testing.
+   *
+   * @param model Model object to be parsed.
+   * @return The FSM for the given object.
+   */
+  public FSM parse(Object model) {
+    Collection<Object> models = new ArrayList<Object>();
+    models.add(model);
+    return parse(models);
+  }
+
+  /**
    * Initiates parsing the given model object for the annotation that define the finite state machine (FSM) aspects
    * of the test model.
    *
-   * @param obj The test model object.
+   * @param modelObjects The set of test model objects to be parsed.
    * @return The FSM object created from the given model object that can be used for test generation.
    */
-  public FSM parse(Object obj) {
+  public FSM parse(Collection<Object> modelObjects) {
     log.debug("parsing");
-    FSM fsm = new FSM(obj);
-    //first we check any annotated fields that are relevant
-    String errors = parseFields(fsm, obj);
-    //next we check any annotated methods that are relevant
-    errors += parseMethods(fsm, obj);
+    FSM fsm = new FSM();
+    String errors = "";
+    for (Object obj : modelObjects) {
+      //first we check any annotated fields that are relevant
+      errors += parseFields(fsm, obj);
+      //next we check any annotated methods that are relevant
+      errors += parseMethods(fsm, obj);
+    }
     //finally we check that the generated FSM itself is valid
     fsm.check(errors);
     return fsm;
