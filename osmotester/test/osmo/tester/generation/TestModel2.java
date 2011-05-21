@@ -1,9 +1,12 @@
 package osmo.tester.generation;
 
 import osmo.tester.annotation.Guard;
+import osmo.tester.annotation.Oracle;
 import osmo.tester.annotation.RequirementsField;
 import osmo.tester.annotation.Transition;
 import osmo.tester.model.Requirements;
+
+import java.io.PrintStream;
 
 /**
  * A test model with requirements that can all be covered.
@@ -16,6 +19,12 @@ public class TestModel2 {
   public static final String REQ_HELLO = "hello";
   public static final String REQ_WORLD = "world";
   public static final String REQ_EPIX = "epix";
+  private PrintStream out = NullPrintStream.stream;
+
+  public TestModel2(Requirements req, PrintStream out) {
+    this.req = req;
+    this.out = out;
+  }
 
   public TestModel2(Requirements req) {
     this.req = req;
@@ -29,6 +38,7 @@ public class TestModel2 {
   @Transition("hello")
   public void transition1() {
     req.covered(REQ_HELLO);
+    out.print(":hello");
   }
 
   @Guard("world")
@@ -39,6 +49,7 @@ public class TestModel2 {
   @Transition("world")
   public void epix() {
     req.covered(REQ_WORLD);
+    out.print(":world");
   }
 
   @Guard("epixx")
@@ -49,5 +60,11 @@ public class TestModel2 {
   @Transition("epixx")
   public void epixx() {
     req.covered(REQ_EPIX);
+    out.print(":epixx");
+  }
+
+  @Oracle("epixx")
+  public void epixxO() {
+    out.print(":epixx_oracle");
   }
 }

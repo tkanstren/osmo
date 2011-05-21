@@ -20,6 +20,8 @@ public class FSMTransition {
   private final Collection<Method> guards = new ArrayList<Method>();
   /** The method that needs to be invoked when the transition should be actually taken. */
   private Method transition = null;
+  /** The set of oracles to be evaluated after this transition has been taken. */
+  private final Collection<Method> oracles = new ArrayList<Method>();
 
   public FSMTransition(String name) {
     this.name = name;
@@ -27,6 +29,10 @@ public class FSMTransition {
 
   public void addGuard(Method method) {
     guards.add(method);
+  }
+
+  public void addOracle(Method method) {
+    oracles.add(method);
   }
 
   public String getName() {
@@ -43,5 +49,9 @@ public class FSMTransition {
 
   public void setTransition(Method transition) {
     this.transition = transition;
+  }
+
+  public Collection<Method> getOracles() {
+    return oracles;
   }
 }

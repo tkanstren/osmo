@@ -156,6 +156,7 @@ public class MainGenerator {
     } catch (Exception e) {
       throw new RuntimeException("Exception while running transition ('"+transition.getName()+"'):", e);
     }
+    invokeAll(transition.getOracles(), "@Oracle", fsm);
   }
 
   public TestSuite getSuite() {

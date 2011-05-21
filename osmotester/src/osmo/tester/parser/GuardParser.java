@@ -22,7 +22,6 @@ public class GuardParser implements AnnotationParser {
     log.debug("found guard for transition: "+transitionName);
     FSM fsm = parameters.getFsm();
     Method method = parameters.getMethod();
-    //TODO: put constants in their own class
     if (transitionName.equals("all")) {
       fsm.addGenericGuard(method);
       //generic guards should not be have their own transition or it will fail the FSM check since it is a guard

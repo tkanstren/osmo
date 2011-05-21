@@ -1,5 +1,6 @@
 package osmo.tester;
 
+import osmo.tester.generator.GenerationListener;
 import osmo.tester.generator.MainGenerator;
 import osmo.tester.generator.algorithm.GenerationAlgorithm;
 import osmo.tester.generator.algorithm.RandomAlgorithm;
@@ -8,6 +9,9 @@ import osmo.tester.generator.strategy.ProbabilityStrategy;
 import osmo.tester.log.Logger;
 import osmo.tester.model.FSM;
 import osmo.tester.parser.MainParser;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * The main class for initiating the MBT tool.
@@ -28,6 +32,8 @@ public class OSMOTester {
   private ExitStrategy testStrategy = new ProbabilityStrategy(0.9d);
   /** The algorithm to traverse the test model to generate test steps. */
   private GenerationAlgorithm algorithm = new RandomAlgorithm();
+  /** Listeners to be notified about test generation events. */
+  private Collection<GenerationListener> listeners = new ArrayList<GenerationListener>();
 
   /**
    * Create the tester with the initialized test model object.
@@ -84,5 +90,9 @@ public class OSMOTester {
    */
   public void setDebug(boolean debug) {
     Logger.debug = debug;
+  }
+
+  public void addListener(GenerationListener listener) {
+    listeners.add(listener);
   }
 }

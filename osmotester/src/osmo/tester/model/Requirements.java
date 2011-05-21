@@ -60,11 +60,21 @@ public class Requirements {
   }
 
   public Collection<String> getExcess() {
-    return null;
+    Collection<String> excess = new ArrayList<String>();
+    excess.addAll(covered);
+    excess.removeAll(requirements);
+    return excess;
   }
 
   public boolean isCovered(String requirement) {
     return covered.contains(requirement);
+  }
+
+  /**
+   * This resets the requirements coverage, removing any coverage information.
+   */
+  public void clearCoverage() {
+    covered.clear();
   }
 
   /**

@@ -5,6 +5,7 @@ import osmo.tester.annotation.AfterSuite;
 import osmo.tester.annotation.Before;
 import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.annotation.Guard;
+import osmo.tester.annotation.Oracle;
 import osmo.tester.annotation.RequirementsField;
 import osmo.tester.annotation.TestSuiteField;
 import osmo.tester.annotation.Transition;
@@ -39,6 +40,7 @@ public class MainParser {
     parsers.put(BeforeSuite.class, new BeforeSuiteParser());
     parsers.put(TestSuiteField.class, new TestSuiteParser());
     parsers.put(RequirementsField.class, new RequirementsParser());
+    parsers.put(Oracle.class, new OracleParser());
   }
 
   /**

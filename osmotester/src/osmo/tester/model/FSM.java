@@ -21,6 +21,8 @@ public class FSM {
   private Map<String, FSMTransition> transitions = new HashMap<String, FSMTransition>();
   /** List of generic guards that apply to all transitions. */
   private Collection<Method> genericGuards = new ArrayList<Method>();
+  /** List of generic oracles that apply to all transitions. */
+  private Collection<Method> genericOracles = new ArrayList<Method>();
   /** List of methods to be executed before each test case. */
   private Collection<Method> befores = new ArrayList<Method>();
   /** List of methods to be executed after each test case. */
@@ -91,14 +93,15 @@ public class FSM {
       String name = transition.getName();
       log.debug("Checking transition:"+ name);
       if (method == null) {
-        errors += "Guard without transition:"+ name +"\n";
-        log.debug("Error: Found guard without a matching transition - "+ name);
+        errors += "Guard/Oracle without transition:"+ name +"\n";
+        log.debug("Error: Found guard/oracle without a matching transition - "+ name);
       } else if (method.getParameterTypes().length > 0) {
         int p = method.getParameterTypes().length;
         errors += "Transition methods are not allowed to have parameters: \""+method.getName()+"()\" has "+p+" parameters.\n";
         log.debug("Error: Found transition with invalid parameters - "+ name);
       }
       errors = checkGuards(transition, errors);
+      errors = checkOracles(transition, errors);
     }
     if (errors.length() > 0) {
       throw new IllegalStateException("Invalid FSM:\n"+errors);
@@ -129,6 +132,27 @@ public class FSM {
       Class<?>[] parameterTypes = guard.getParameterTypes();
       if (parameterTypes.length > 0) {
         errors += "Guard methods are not allowed to have parameters: \""+guard.getName()+"()\" has "+parameterTypes.length+" parameters.\n";
+      }
+    }
+    return errors;
+  }
+
+  /**
+   * Checks all oracles to see that there are no oracles without associated transitions.
+   * Also checks that the oracle methods have no parameters.
+   *
+   * @param transition The transition to check.
+   * @param errors The current error message string.
+   * @return The error msg string given with possible new errors appended.
+   */
+  private String checkOracles(FSMTransition transition, String errors) {
+    for (Method oracle : genericOracles) {
+      transition.addOracle(oracle);
+    }
+    for (Method oracle : transition.getOracles()) {
+      Class<?>[] parameterTypes = oracle.getParameterTypes();
+      if (parameterTypes.length > 0) {
+        errors += "Oracle methods are not allowed to have parameters: \""+oracle.getName()+"()\" has "+parameterTypes.length+" parameters.\n";
       }
     }
     return errors;
@@ -195,11 +219,20 @@ public class FSM {
   }
 
   /**
-   * Add a guard that should return true for all methods in the test model.
+   * Add a guard that should return true for all transitions in the test model.
    *
    * @param method The guard method to be invoked for evaluation.
    */
   public void addGenericGuard(Method method) {
     genericGuards.add(method);
+  }
+
+  /**
+   * Add an oracle that should be evaluated for all transitions in the test model.
+   *
+   * @param method The oracle method to be invoked for evaluation.
+   */
+  public void addGenericOracle(Method method) {
+    genericOracles.add(method);
   }
 }

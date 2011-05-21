@@ -5,6 +5,7 @@ import osmo.tester.annotation.AfterSuite;
 import osmo.tester.annotation.Before;
 import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.annotation.Guard;
+import osmo.tester.annotation.Oracle;
 import osmo.tester.annotation.RequirementsField;
 import osmo.tester.annotation.TestSuiteField;
 import osmo.tester.annotation.Transition;
@@ -79,5 +80,13 @@ public class TestModel1 {
   @Guard("epixx")
   public boolean kitted() {
     return false;
+  }
+
+  @Oracle
+  public void stateOracle() {
+  }
+
+  @Oracle("epixx")
+  public void epixxOracle() {
   }
 }
