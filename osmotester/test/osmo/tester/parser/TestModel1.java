@@ -82,11 +82,20 @@ public class TestModel1 {
     return false;
   }
 
+  @Guard({"epixx", "world"})
+  public boolean gaagaa() {
+    return false;
+  }
+
   @Oracle
   public void stateOracle() {
   }
 
   @Oracle("epixx")
   public void epixxOracle() {
+  }
+
+  @Oracle({"hello", "epixx"})
+  public void commonOracle() {
   }
 }

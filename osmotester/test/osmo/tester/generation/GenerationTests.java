@@ -48,7 +48,6 @@ public class GenerationTests {
     ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
     PrintStream ps = new PrintStream(out);
     OSMOTester osmo = new OSMOTester(new TestModel3(ps));
-    osmo.setDebug(true);
     LengthStrategy length3 = new LengthStrategy(3);
     LengthStrategy length1 = new LengthStrategy(1);
     osmo.setTestStrategy(length3);
@@ -64,7 +63,6 @@ public class GenerationTests {
     ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
     PrintStream ps = new PrintStream(out);
     OSMOTester osmo = new OSMOTester(new TestModel3(ps));
-    osmo.setDebug(true);
     LengthStrategy length3 = new LengthStrategy(3);
     LengthStrategy length4 = new LengthStrategy(4);
     osmo.setTestStrategy(length3);
@@ -77,5 +75,22 @@ public class GenerationTests {
     four += one;
     String actual = out.toString();
     assertEquals(four, actual);
+  }
+
+  @Test
+  public void generateTestModel4Times2() {
+    ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
+    PrintStream ps = new PrintStream(out);
+    OSMOTester osmo = new OSMOTester(new TestModel4(ps));
+    LengthStrategy length3 = new LengthStrategy(3);
+    LengthStrategy length2 = new LengthStrategy(2);
+    osmo.setTestStrategy(length3);
+    osmo.setSuiteStrategy(length2);
+    osmo.generate();
+    String one = ":hello:two_oracle:gen_oracle:world:two_oracle:gen_oracle:epixx:epixx_oracle:gen_oracle";
+    String two = one;
+    two += one;
+    String actual = out.toString();
+    assertEquals(two, actual);
   }
 }

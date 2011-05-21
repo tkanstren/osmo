@@ -18,16 +18,19 @@ public class OracleParser implements AnnotationParser {
     Oracle oracle = (Oracle) parameters.getAnnotation();
     Method method = parameters.getMethod();
     FSM fsm = parameters.getFsm();
-    String transitionName = oracle.value();
-    if (transitionName.equals("all")) {
-      fsm.addGenericOracle(method);
-      //generic guards should not be have their own transition or it will fail the FSM check since it is a guard
-      //without a transition
-      //TODO: add check that no transition called "all" is allowed
-      return "";
+    String[] transitionNames = oracle.value();
+    for (String name : transitionNames) {
+      log.debug("Parsing oracle '"+name+"'");
+      if (name.equals("all")) {
+        fsm.addGenericOracle(method);
+        //generic guards should not be have their own transition or it will fail the FSM check since it is a guard
+        //without a transition
+        //TODO: add check that no transition called "all" is allowed
+        continue;
+      }
+      FSMTransition transition = fsm.createTransition(name);
+      transition.addOracle(method);
     }
-    FSMTransition transition = fsm.createTransition(transitionName);
-    transition.addOracle(method);
     return "";
   }
 }
