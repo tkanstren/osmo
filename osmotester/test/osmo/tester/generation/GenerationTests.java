@@ -93,4 +93,21 @@ public class GenerationTests {
     String actual = out.toString();
     assertEquals(two, actual);
   }
+
+  @Test
+  public void generateTestModel5Times2() {
+    ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
+    PrintStream ps = new PrintStream(out);
+    OSMOTester osmo = new OSMOTester(new TestModel5(ps));
+    LengthStrategy length3 = new LengthStrategy(3);
+    LengthStrategy length2 = new LengthStrategy(2);
+    osmo.setTestStrategy(length3);
+    osmo.setSuiteStrategy(length2);
+    osmo.generate();
+    String one = ":hello:two_oracle:gen_oracle:world:two_oracle:gen_oracle";
+    String two = one;
+    two += one;
+    String actual = out.toString();
+    assertEquals(two, actual);
+  }
 }

@@ -26,7 +26,6 @@ import java.lang.annotation.Target;
  *   return Math.random() > 0.6;
  * }
  *
- *
  * The above example will allow the transition named "bob" (method hello()) to be taken in the random
  * function from Math.random() returns a value bigger than 0.6.
  *

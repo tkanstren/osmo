@@ -33,6 +33,7 @@ public class ParserTests {
     assertTransitionPresent(fsm, "hello", 0, 2);
     assertTransitionPresent(fsm, "world", 3, 1);
     assertTransitionPresent(fsm, "epixx", 2, 3);
+    assertEquals("Number of end conditions", 2, fsm.getEndConditions().size());
     assertNotNull("Should have TestLog set", model.getHistory());
     assertNotNull("Should have Requirements set", fsm.getRequirements());
     Thread.sleep(1000);
@@ -65,7 +66,9 @@ public class ParserTests {
       String expected = "Invalid FSM:\n" +
               "@RequirementsField class must be of type "+ Requirements.class.getName()+". Was "+String.class.getName()+".\n"+
               "@TestSuiteField class must be of type osmo.tester.generator.testsuite.TestSuite. Was java.lang.String.\n"+
-              "Invalid return type for guard (\"hello()\"):class java.lang.String.\n";
+              "Invalid return type for guard (\"hello()\"):class java.lang.String.\n"+
+              "Oracle methods are not allowed to have parameters: \"wrong()\" has 1 parameters.\n" +
+              "Invalid return type for end condition (\"end()\"):void. Should be boolean.\n";
       assertEquals(expected, msg);
     }
   }
@@ -83,7 +86,8 @@ public class ParserTests {
       String expected = "Invalid FSM:\n" +
               "@RequirementsField value was null, which is not allowed.\n"+
               "@TestSuiteField value was pre-initialized in the model, which is not allowed.\n"+
-              "Guard methods are not allowed to have parameters: \"hello()\" has 1 parameters.\n";
+              "Guard methods are not allowed to have parameters: \"hello()\" has 1 parameters.\n"+
+              "End condition methods are not allowed to have parameters: \"ending()\" has 1 parameters.\n";
       assertEquals(expected, msg);
     }
   }
@@ -96,7 +100,9 @@ public class ParserTests {
       fail("Should throw exception");
     } catch (Exception e) {
       String msg = e.getMessage();
-      String expected = "Invalid FSM:\n" + "Transition methods are not allowed to have parameters: \"epixx()\" has 1 parameters.\n";
+      String expected = "Invalid FSM:\n" + "Transition methods are not allowed to have parameters: \"epixx()\" has 1 parameters.\n"+
+              "Invalid return type for end condition (\"hello()\"):class java.lang.String. Should be boolean.\n" +
+              "End condition methods are not allowed to have parameters: \"hello()\" has 1 parameters.\n";
       assertEquals(expected, msg);
     }
   }

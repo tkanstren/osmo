@@ -4,6 +4,7 @@ import osmo.tester.annotation.After;
 import osmo.tester.annotation.AfterSuite;
 import osmo.tester.annotation.Before;
 import osmo.tester.annotation.BeforeSuite;
+import osmo.tester.annotation.EndCondition;
 import osmo.tester.annotation.Guard;
 import osmo.tester.annotation.Oracle;
 import osmo.tester.annotation.RequirementsField;
@@ -97,5 +98,15 @@ public class TestModel1 {
 
   @Oracle({"hello", "epixx"})
   public void commonOracle() {
+  }
+
+  @EndCondition
+  public boolean end1() {
+    return false;
+  }
+
+  @EndCondition
+  public boolean end2() {
+    return false;
   }
 }

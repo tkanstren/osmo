@@ -1,6 +1,8 @@
 package osmo.tester.parser;
 
+import osmo.tester.annotation.EndCondition;
 import osmo.tester.annotation.Guard;
+import osmo.tester.annotation.Oracle;
 import osmo.tester.annotation.RequirementsField;
 import osmo.tester.annotation.TestSuiteField;
 import osmo.tester.annotation.Transition;
@@ -21,5 +23,13 @@ public class TestModel3 {
 
   @Transition("foo")
   public void epixx() {
+  }
+
+  @EndCondition
+  public void end() {
+  }
+
+  @Oracle
+  public void wrong(String p1) {
   }
 }

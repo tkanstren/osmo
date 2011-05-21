@@ -4,6 +4,7 @@ import osmo.tester.annotation.After;
 import osmo.tester.annotation.AfterSuite;
 import osmo.tester.annotation.Before;
 import osmo.tester.annotation.BeforeSuite;
+import osmo.tester.annotation.EndCondition;
 import osmo.tester.annotation.Guard;
 import osmo.tester.annotation.Oracle;
 import osmo.tester.annotation.RequirementsField;
@@ -41,6 +42,7 @@ public class MainParser {
     parsers.put(TestSuiteField.class, new TestSuiteParser());
     parsers.put(RequirementsField.class, new RequirementsParser());
     parsers.put(Oracle.class, new OracleParser());
+    parsers.put(EndCondition.class, new EndConditionParser());
   }
 
   /**
@@ -67,6 +69,7 @@ public class MainParser {
    *
    * @param fsm The test model object to be updated according to the parsed information.
    * @param obj The model object that contains the annotations and fields/executable methods for test generation.
+   * @return A string listing all found errors.
    */
   private String parseFields(FSM fsm, Object obj) {
     //first we find all declared fields of any scope and type (private, protected, ...)
@@ -107,6 +110,7 @@ public class MainParser {
    *
    * @param fsm The test model object to be updated according to the parsed information.
    * @param obj The model object that contains the annotations and fields/executable methods for test generation.
+   * @return String representing any errors encountered.
    */
   private String parseMethods(FSM fsm, Object obj) {
     //first we get all methods defined in the test model object (also all scopes -> private, protected, ...)

@@ -31,6 +31,8 @@ public class FSM {
   private Collection<Method> beforeSuites = new ArrayList<Method>();
   /** List of methods to be executed after the overall test suite. */
   private Collection<Method> afterSuites = new ArrayList<Method>();
+  /** List of conditions when to stop (prematurely) test generation (single test, not suite). */
+  private Collection<Method> endConditions = new ArrayList<Method>();
   /** The generated test suite (or one being generated). */
   private final TestSuite testSuite = new TestSuite();
   /** The list of requirements that needs to be covered. */
@@ -77,6 +79,7 @@ public class FSM {
    * -Check that no @Transition method has parameters.
    * -Check that each @Guard returns a boolean value.
    * -Check that no @Guard method has a return value.
+   * @param errors Previously defined errors to be reported in addition to new ones found.
    */
   public void check(String errors) {
     log.debug("Checking FSM validity");
@@ -103,6 +106,7 @@ public class FSM {
       errors = checkGuards(transition, errors);
       errors = checkOracles(transition, errors);
     }
+    errors = checkEndConditions(errors);
     if (errors.length() > 0) {
       throw new IllegalStateException("Invalid FSM:\n"+errors);
     }
@@ -158,6 +162,27 @@ public class FSM {
     return errors;
   }
 
+  /**
+   * Check the model end conditions.
+   * Each end condition must have a boolean return value and no parameters.
+   *
+   * @param errors The current error message string.
+   * @return The error msg string given with possible new errors appended.
+   */
+  private String checkEndConditions(String errors) {
+    for (Method ec : endConditions) {
+      Class<?> type = ec.getReturnType();
+      if (!(type.equals(boolean.class))) {
+        errors += "Invalid return type for end condition (\""+ec.getName()+"()\"):"+type+". Should be boolean.\n";
+      }
+      Class<?>[] parameterTypes = ec.getParameterTypes();
+      if (parameterTypes.length > 0) {
+        errors += "End condition methods are not allowed to have parameters: \""+ec.getName()+"()\" has "+parameterTypes.length+" parameters.\n";
+      }
+    }
+    return errors;
+  }
+
   public FSMTransition getTransition(String name) {
     return transitions.get(name);
   }
@@ -206,6 +231,10 @@ public class FSM {
     return requirements;
   }
 
+  public Collection<Method> getEndConditions() {
+    return endConditions;
+  }
+
   /**
    * Sets the Requirements object, either from the parser if it found one in the model object or from this class
    * if not. Also initialized the requirements object to contain the {@link TestSuite} object for storing and
@@ -234,5 +263,9 @@ public class FSM {
    */
   public void addGenericOracle(Method method) {
     genericOracles.add(method);
+  }
+
+  public void addEndCondition(Method method) {
+    endConditions.add(method);
   }
 }

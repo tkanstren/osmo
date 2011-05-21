@@ -60,12 +60,38 @@ public class MainGenerator {
         FSMTransition next = algorithm.choose(suite, enabled);
         log.debug("Taking transition "+next.getName());
         execute(fsm, next);
+        if (checkEndConditions(fsm)) {
+          //stop this test case generation if any end condition returns true
+          break;
+        }
       }
       afterTest(fsm);
       log.debug("Finished new test generation");
     }
     afterSuite(fsm);
     log.debug("Finished test suite generation");
+  }
+
+  /**
+   * Calls every defind end condition and if any return true, also returns true. Otherwise, false.
+   *
+   * @param fsm The model object on which to invoke the methods.
+   * @return true if current test case (not suite) generation should be stopped.
+   */
+  private boolean checkEndConditions(FSM fsm) {
+    Object obj = fsm.getModel();
+    Collection<Method> endConditions = fsm.getEndConditions();
+    for (Method ec : endConditions) {
+      try {
+        Boolean result = (Boolean)ec.invoke(obj);
+        if (result) {
+          return true;
+        }
+      } catch (Exception e) {
+        throw new RuntimeException("Failed to invoke guard method.", e);
+      }
+    }
+    return false;
   }
 
   private void beforeSuite(FSM fsm) {
