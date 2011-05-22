@@ -3,10 +3,14 @@ package osmo.tester.examples;
 import osmo.tester.OSMOTester;
 import osmo.tester.annotation.AfterSuite;
 import osmo.tester.annotation.Before;
+import osmo.tester.annotation.EndCondition;
 import osmo.tester.annotation.Guard;
+import osmo.tester.annotation.Oracle;
 import osmo.tester.annotation.TestSuiteField;
 import osmo.tester.annotation.Transition;
 import osmo.tester.generator.testsuite.TestSuite;
+
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Example of a vending machine.
@@ -26,7 +30,7 @@ public class VendingExample {
   @TestSuiteField
   private TestSuite testSuite = null;
 
-  @Guard("all")
+  @Guard
   public boolean gotBottles() {
     return bottles > 0;
   }
@@ -34,7 +38,7 @@ public class VendingExample {
   @Before
   public void start() {
     coins = 0;
-    //uncomment this for failure to continute with 0 available transitions
+    //uncomment this for failure to continue with 0 available transitions
     bottles = 10;
     int tests = testSuite.getHistory().size()+1;
     System.out.println("Starting test:"+ tests);
@@ -88,6 +92,20 @@ public class VendingExample {
     scripter.step("VEND ("+bottles+")\n");
     coins = 0;
     bottles--;
+  }
+
+  @EndCondition
+  public boolean end() {
+    return bottles <= 0;
+  }
+
+  @Oracle
+  public void checkState() {
+    scripter.step("CHECK(bottles == "+bottles+")");
+    scripter.step("CHECK(coins == "+coins+")");
+    assertTrue(coins <= 100);
+    assertTrue(coins >= 0);
+    assertTrue(bottles >= 0);
   }
 
   public static void main(String[] args) {
