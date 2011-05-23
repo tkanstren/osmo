@@ -5,7 +5,7 @@ import osmo.tester.OSMOTester;
 import osmo.tester.generator.strategy.LengthStrategy;
 import osmo.tester.model.Requirements;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
 
 /**
  * @author Teemu Kanstren
@@ -19,6 +19,7 @@ public class RequirementsTests {
     req.add(TestModel2.REQ_WORLD);
     OSMOTester osmo = new OSMOTester(new TestModel2(req));
     osmo.setTestStrategy(new LengthStrategy(3));
+    osmo.setSuiteStrategy(new LengthStrategy(1));
     osmo.generate();
     assertEquals(3, req.getCovered().size());
     assertEquals(3, req.getRequirements().size());
@@ -31,6 +32,7 @@ public class RequirementsTests {
     req.add(TestModel2.REQ_EPIX);
     OSMOTester osmo = new OSMOTester(new TestModel2(req));
     osmo.setTestStrategy(new LengthStrategy(3));
+    osmo.setSuiteStrategy(new LengthStrategy(1));
     osmo.generate();
     assertEquals(3, req.getCovered().size());
     assertEquals(1, req.getRequirements().size());
@@ -42,6 +44,7 @@ public class RequirementsTests {
     Requirements req = new Requirements();
     OSMOTester osmo = new OSMOTester(new TestModel2(req));
     osmo.setTestStrategy(new LengthStrategy(3));
+    osmo.setSuiteStrategy(new LengthStrategy(1));
     osmo.generate();
     assertEquals(3, req.getCovered().size());
     assertEquals(0, req.getRequirements().size());
@@ -57,6 +60,7 @@ public class RequirementsTests {
     req.add("undefined");
     OSMOTester osmo = new OSMOTester(new TestModel2(req));
     osmo.setTestStrategy(new LengthStrategy(3));
+    osmo.setSuiteStrategy(new LengthStrategy(1));
     osmo.generate();
     assertEquals(3, req.getCovered().size());
     assertEquals(4, req.getRequirements().size());

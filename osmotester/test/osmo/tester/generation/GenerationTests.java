@@ -2,23 +2,27 @@ package osmo.tester.generation;
 
 import org.junit.Test;
 import osmo.tester.OSMOTester;
-import osmo.tester.generator.GenerationListener;
 import osmo.tester.generator.strategy.LengthStrategy;
 import osmo.tester.model.Requirements;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 
 import static junit.framework.Assert.*;
 
 /**
+ * Test cases that exercise the model generator, checking the output for the given test models.
+ *
  * @author Teemu Kanstren
  */
 public class GenerationTests {
   @Test
   public void noEnabledTransition() {
     OSMOTester osmo = new OSMOTester(new TestModel1());
+    LengthStrategy length3 = new LengthStrategy(3);
+    LengthStrategy length1 = new LengthStrategy(1);
+    osmo.setTestStrategy(length3);
+    osmo.setSuiteStrategy(length1);
     try {
       osmo.generate();
       fail("Generation without available transitions should fail.");
@@ -110,4 +114,30 @@ public class GenerationTests {
     String actual = out.toString();
     assertEquals(two, actual);
   }
+
+  @Test
+  public void GeneratePartialModelsTimes2() {
+    Requirements req = new Requirements();
+    req.add(PartialModel1.REQ_HELLO);
+    req.add(PartialModel1.REQ_WORLD);
+    req.add(PartialModel1.REQ_EPIX);
+    ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
+    PrintStream ps = new PrintStream(out);
+    PartialModel1 model1 = new PartialModel1(req, ps);
+    PartialModel2 model2 = new PartialModel2(req, ps);
+    OSMOTester osmo = new OSMOTester();
+    osmo.addModelObject(model1);
+    osmo.addModelObject(model2);
+    LengthStrategy length3 = new LengthStrategy(3);
+    LengthStrategy length2 = new LengthStrategy(2);
+    osmo.setTestStrategy(length3);
+    osmo.setSuiteStrategy(length2);
+    osmo.generate();
+    String one = ":hello:two_oracle:gen_oracle:world:two_oracle:gen_oracle:epixx:epixx_oracle:gen_oracle";
+    String two = one;
+    two += one;
+    String actual = out.toString();
+    assertEquals(two, actual);
+  }
+
 }

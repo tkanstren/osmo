@@ -1,7 +1,6 @@
 package osmo.tester.parser;
 
 import osmo.tester.annotation.After;
-import osmo.tester.annotation.AfterSuite;
 import osmo.tester.annotation.Before;
 import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.annotation.EndCondition;

@@ -10,6 +10,8 @@ import osmo.tester.annotation.Transition;
 import osmo.tester.generator.algorithm.RandomAlgorithm;
 import osmo.tester.generator.strategy.LengthStrategy;
 
+import java.io.PrintStream;
+
 /**
  * This is the simple OSMO tester example model made by finite-state-machine (FSM) style
  *
@@ -22,33 +24,42 @@ public class CalculatorModel2 {
   private int counter = 0;
   private int testCount = 1;
   private State currentState;
+  private final PrintStream out;
   private enum State{
 	  Start,
 	  Decrease,
 	  Increase,
   }
 
+  public CalculatorModel2() {
+    this.out = System.out;
+  }
+
+  public CalculatorModel2(PrintStream out) {
+    this.out = out;
+  }
+
   @BeforeSuite
   public void first() {
-    System.out.println("first");
+    out.println("first");
   }
 
   @AfterSuite
   public void last() {
-    System.out.println("last");
+    out.println("last");
   }
 
   @Before
   public void start() {
     counter = 0;
-    System.out.println("Starting new test case "+testCount);
+    out.println("Starting new test case "+testCount);
     testCount++;
     currentState = null;
   }
 
   @After
   public void end() {
-    System.out.println("Test case ended\n");
+    out.println("Test case ended");
   }
 
   @Guard("start")
@@ -58,7 +69,7 @@ public class CalculatorModel2 {
 
   @Transition("start")
   public void startState() {
-    System.out.println("S:" + counter);
+    out.println("S:" + counter);
     counter++;
     currentState = State.Start;
   }
@@ -70,7 +81,7 @@ public class CalculatorModel2 {
 
   @Transition("decrease")
   public void decreaseState() {
-	System.out.println("Decreased: " + counter--);
+	out.println("Decreased: " + counter--);
     currentState = State.Decrease;
   }
 
@@ -81,7 +92,7 @@ public class CalculatorModel2 {
 
   @Transition("increase")
   public void increaseState() {
-	System.out.println("Increased: " + counter++);
+	out.println("Increased: " + counter++);
     currentState = State.Increase;
   }
 
