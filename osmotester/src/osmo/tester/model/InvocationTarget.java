@@ -2,7 +2,6 @@ package osmo.tester.model;
 
 import osmo.tester.parser.ParserParameters;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**

@@ -3,7 +3,7 @@ package osmo.tester.strategies;
 import org.junit.Test;
 import osmo.tester.generator.strategy.ProbabilityStrategy;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.fail;
 
 /**
  * @author Teemu Kanstren

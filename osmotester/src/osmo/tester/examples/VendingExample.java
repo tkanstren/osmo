@@ -10,6 +10,8 @@ import osmo.tester.annotation.TestSuiteField;
 import osmo.tester.annotation.Transition;
 import osmo.tester.generator.testsuite.TestSuite;
 
+import java.io.PrintStream;
+
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -24,11 +26,22 @@ import static junit.framework.Assert.assertTrue;
  * @author Teemu Kanstren
  */
 public class VendingExample {
-  private Scripter scripter = new Scripter();
+  private final Scripter scripter;
+  private final PrintStream out;
   private int coins = 0;
   private int bottles = 10;
   @TestSuiteField
   private TestSuite testSuite = null;
+
+  public VendingExample() {
+    scripter = new Scripter(System.out);
+    this.out = System.out;
+  }
+
+  public VendingExample(PrintStream ps) {
+    scripter = new Scripter(ps);
+    this.out = ps;
+  }
 
   @Guard
   public boolean gotBottles() {
@@ -41,12 +54,12 @@ public class VendingExample {
     //uncomment this for failure to continue with 0 available transitions
     bottles = 10;
     int tests = testSuite.getHistory().size()+1;
-    System.out.println("Starting test:"+ tests);
+    out.println("Starting test:"+ tests);
   }
 
   @AfterSuite
   public void done() {
-    System.out.println("Created total of "+ testSuite.getHistory().size()+" tests.");
+    out.println("Created total of "+ testSuite.getHistory().size()+" tests.");
   }
 
   @Guard("20cents")
@@ -56,7 +69,7 @@ public class VendingExample {
 
   @Transition("20cents")
   public void insert20cents() {
-    scripter.step("INSERT 20\n");
+    scripter.step("INSERT 20");
     coins += 20;
   }
 
@@ -67,7 +80,7 @@ public class VendingExample {
 
   @Transition("10cents")
   public void insert10cents() {
-    scripter.step("INSERT 10\n");
+    scripter.step("INSERT 10");
     coins += 10;
   }
 
@@ -78,7 +91,7 @@ public class VendingExample {
 
   @Transition("50cents")
   public void insert50cents() {
-    scripter.step("INSERT 50\n");
+    scripter.step("INSERT 50");
     coins += 50;
   }
 
@@ -89,7 +102,7 @@ public class VendingExample {
 
   @Transition("vend")
   public void vend() {
-    scripter.step("VEND ("+bottles+")\n");
+    scripter.step("VEND ("+bottles+")");
     coins = 0;
     bottles--;
   }

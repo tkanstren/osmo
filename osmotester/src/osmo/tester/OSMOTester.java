@@ -45,6 +45,21 @@ public class OSMOTester {
   }
 
   /**
+   * A constructor for use with addModelObject() method.
+   */
+  public OSMOTester() {
+  }
+
+  /**
+   * Adds a new model object, to be composed by OSMO to a single internal model along with other model objects.
+   *
+   * @param modelObject The model object (with OSMO annotations) to be added.
+   */
+  public void addModelObject(Object modelObject) {
+    modelObjects.add(modelObject);
+  }
+
+  /**
    * Invoke this to perform actual test generation from the given model, with the given algorithms and strategies.
    */
   public void generate() {

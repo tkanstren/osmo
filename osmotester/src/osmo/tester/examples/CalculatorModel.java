@@ -13,6 +13,8 @@ import osmo.tester.generator.strategy.LengthStrategy;
 import osmo.tester.generator.testsuite.TestSuite;
 import osmo.tester.model.Requirements;
 
+import java.io.PrintStream;
+
 /**
  * Same as the other calculator but without explicit state enumeration. Instead this will keep the counter > 0 and
  * use the counter itself to define the state. This also illustrates how you can name your methods and elements in
@@ -29,10 +31,16 @@ public class CalculatorModel {
   private int testCount = 1;
   private static final String REQ_INCREASE = "increase";
   private static final String REQ_DECREASE = "decrease";
+  private final PrintStream out;
 
   public CalculatorModel() {
+    this(System.out);
+  }
+
+  public CalculatorModel(PrintStream out) {
     requirement.add(REQ_INCREASE);
     requirement.add(REQ_DECREASE);
+    this.out = out;
   }
 
   public TestSuite getHistory() {
@@ -41,24 +49,24 @@ public class CalculatorModel {
 
   @BeforeSuite
   public void first() {
-    System.out.println("first");
+    out.println("first");
   }
 
   @AfterSuite
   public void last() {
-    System.out.println("last");
+    out.println("last");
   }
 
   @Before
   public void start() {
     counter = 0;
-    System.out.println("Starting new test case "+testCount);
+    out.println("Starting new test case "+testCount);
     testCount++;
   }
 
   @After
   public void end() {
-    System.out.println("Test case ended\n");
+    out.println("Test case ended");
   }
 
   @Guard("start")
@@ -68,7 +76,7 @@ public class CalculatorModel {
 
   @Transition("start")
   public void startState() {
-    System.out.println("S:" + counter);
+    out.println("S:" + counter);
     counter++;
   }
 
@@ -81,7 +89,7 @@ public class CalculatorModel {
   public void decreaseState() {
     requirement.covered(REQ_DECREASE);
     counter--;
-    System.out.println("- " + counter);
+    out.println("- " + counter);
   }
 
   @Guard("increase")
@@ -93,7 +101,7 @@ public class CalculatorModel {
   public void increaseState() {
     requirement.covered(REQ_INCREASE);
     counter++;
-    System.out.println("+ " + counter);
+    out.println("+ " + counter);
   }
 
   public static void main(String[] args) {

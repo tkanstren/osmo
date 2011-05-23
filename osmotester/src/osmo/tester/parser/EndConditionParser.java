@@ -1,6 +1,5 @@
 package osmo.tester.parser;
 
-import osmo.tester.annotation.After;
 import osmo.tester.annotation.EndCondition;
 import osmo.tester.log.Logger;
 import osmo.tester.model.InvocationTarget;
