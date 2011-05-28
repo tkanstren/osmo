@@ -24,23 +24,49 @@ public class MainGenerator {
   /** Test generation history. Initialized from the given model to enable sharing the object with model and generator. */
   private TestSuite suite = null;
   /** The set of enabled transitions in the current state is passed to this algorithm to pick one to execute. */
-  private final GenerationAlgorithm algorithm;
+  private GenerationAlgorithm algorithm;
   /** Defines when test suite generation should be stopped. Invoked between each test case. */
-  private final ExitStrategy suiteStrategy;
+  private ExitStrategy suiteStrategy;
   /** Defines when test case generation should be stopped. Invoked between each test step. */
-  private final ExitStrategy testStrategy;
+  private ExitStrategy testStrategy;
+  private GenerationListenerList listeners;
 
   /**
    * Constructor.
+   */
+  public MainGenerator() {
+  }
+
+  /**
    *
    * @param algorithm The set of enabled transitions in the current state is passed to this algorithm to pick one to execute.
+   */
+  public void setAlgorithm(GenerationAlgorithm algorithm) {
+    this.algorithm = algorithm;
+  }
+
+  /**
+   *
    * @param suiteStrategy Defines when test suite generation should be stopped. Invoked between each test case.
+   */
+  public void setSuiteStrategy(ExitStrategy suiteStrategy) {
+    this.suiteStrategy = suiteStrategy;
+  }
+
+  /**
+   *
    * @param testStrategy Defines when test case generation should be stopped. Invoked between each test step.
    */
-  public MainGenerator(GenerationAlgorithm algorithm, ExitStrategy suiteStrategy, ExitStrategy testStrategy) {
-    this.algorithm = algorithm;
-    this.suiteStrategy = suiteStrategy;
+  public void setTestStrategy(ExitStrategy testStrategy) {
     this.testStrategy = testStrategy;
+  }
+
+  /**
+   * 
+   * @param listeners Listeners to be notified about generation events.
+   */
+  public void setListeners(GenerationListenerList listeners) {
+    this.listeners = listeners;
   }
 
   /**
@@ -81,7 +107,7 @@ public class MainGenerator {
   private boolean checkEndConditions(FSM fsm) {
     Collection<InvocationTarget> endConditions = fsm.getEndConditions();
     for (InvocationTarget ec : endConditions) {
-      Boolean result = (Boolean)ec.invoke("@EndCondition");
+      Boolean result = (Boolean)ec.invoke();
       if (result) {
         return true;
       }
@@ -90,27 +116,31 @@ public class MainGenerator {
   }
 
   private void beforeSuite(FSM fsm) {
+    listeners.suiteStarted();
     Collection<InvocationTarget> befores = fsm.getBeforeSuites();
-    invokeAll(befores, "@BeforeSuite");
+    invokeAll(befores);
   }
 
   private void afterSuite(FSM fsm) {
     Collection<InvocationTarget> afters = fsm.getAfterSuites();
-    invokeAll(afters, "@AfterSuite");
+    invokeAll(afters);
+    listeners.suiteEnded();
   }
 
   private void beforeTest(FSM fsm) {
     //update history
     suite.startTest();
+    listeners.testStarted();
     Collection<InvocationTarget> befores = fsm.getBefores();
-    invokeAll(befores, "@Before");
+    invokeAll(befores);
   }
 
   private void afterTest(FSM fsm) {
     Collection<InvocationTarget> afters = fsm.getAfters();
-    invokeAll(afters, "@After");
+    invokeAll(afters);
     //update history
     suite.endTest();
+    listeners.testEnded();
   }
 
   /**
@@ -118,9 +148,9 @@ public class MainGenerator {
    *
    * @param targets The methods to be invoked.
    */
-  private void invokeAll(Collection<InvocationTarget> targets, String type) {
+  private void invokeAll(Collection<InvocationTarget> targets) {
     for (InvocationTarget target : targets) {
-      target.invoke(type);
+      target.invoke();
     }
   }
 
@@ -139,7 +169,8 @@ public class MainGenerator {
     enabled.addAll(allTransitions);
     for (FSMTransition transition : allTransitions) {
       for (InvocationTarget guard : transition.getGuards()) {
-        Boolean result = (Boolean)guard.invoke("@Guard");
+        listeners.guard(guard.getMethod().getName()+"("+transition.getName()+")");
+        Boolean result = (Boolean)guard.invoke();
         if (!result) {
           enabled.remove(transition);
         }
@@ -159,9 +190,10 @@ public class MainGenerator {
   public void execute(FSMTransition transition) {
     //we have to add this first or it will produce failures..
     suite.add(transition);
+    listeners.transition(transition.getName());
     InvocationTarget target = transition.getTransition();
-    target.invoke("@Transition");
-    invokeAll(transition.getOracles(), "@Oracle");
+    target.invoke();
+    invokeAll(transition.getOracles());
   }
 
   public TestSuite getSuite() {

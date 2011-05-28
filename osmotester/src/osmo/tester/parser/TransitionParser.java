@@ -17,9 +17,8 @@ public class TransitionParser implements AnnotationParser {
   public String parse(ParserParameters parameters) {
     Transition t = (Transition) parameters.getAnnotation();
     String name = t.value();
-    log.debug("Found transition: "+name);
     FSMTransition transition = parameters.getFsm().createTransition(name);
-    transition.setTransition(new InvocationTarget(parameters));
+    transition.setTransition(new InvocationTarget(parameters, Transition.class));
     return "";
   }
 }

@@ -18,8 +18,7 @@ public class BeforeSuiteParser implements AnnotationParser {
   public String parse(ParserParameters parameters) {
     BeforeSuite before = (BeforeSuite) parameters.getAnnotation();
     Method method = parameters.getMethod();
-    log.debug("found @BeforeSuite method:"+method.getName());
-    parameters.getFsm().addBeforeSuite(new InvocationTarget(parameters));
+    parameters.getFsm().addBeforeSuite(new InvocationTarget(parameters, BeforeSuite.class));
     return "";
   }
 }

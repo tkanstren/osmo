@@ -1,5 +1,4 @@
 -traceability matrix, which test case covers which requirement
--requirements function description
 -read requirement list from code
 -kattavuuksia, onko vaatimus katettu otetaanko mukaan, onko transitiot katettu, otetaanko mukaan? tuoko uutta? otetaanko mukaan?
 -input ja output arvojen huomiointi

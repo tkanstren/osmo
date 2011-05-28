@@ -15,7 +15,7 @@ public class OracleParser implements AnnotationParser {
   @Override
   public String parse(ParserParameters parameters) {
     Oracle oracle = (Oracle) parameters.getAnnotation();
-    InvocationTarget target = new InvocationTarget(parameters);
+    InvocationTarget target = new InvocationTarget(parameters, Oracle.class);
     FSM fsm = parameters.getFsm();
     String[] transitionNames = oracle.value();
     for (String name : transitionNames) {

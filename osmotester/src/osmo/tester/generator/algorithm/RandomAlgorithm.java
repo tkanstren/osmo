@@ -1,5 +1,6 @@
 package osmo.tester.generator.algorithm;
 
+import osmo.tester.generator.GenerationListenerList;
 import osmo.tester.generator.testsuite.TestSuite;
 import osmo.tester.model.FSMTransition;
 

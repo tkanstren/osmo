@@ -1,5 +1,6 @@
 package osmo.tester.generator.algorithm;
 
+import osmo.tester.generator.GenerationListenerList;
 import osmo.tester.generator.testsuite.TestSuite;
 import osmo.tester.model.FSMTransition;
 
@@ -21,5 +22,5 @@ public interface GenerationAlgorithm {
    * @param transitions The set of enabled transitions, from which the algorithm should pick one.
    * @return  The transition that should be taken next.
    */
-  public FSMTransition choose(TestSuite history, List<FSMTransition> transitions);
+  public abstract FSMTransition choose(TestSuite history, List<FSMTransition> transitions);
 }

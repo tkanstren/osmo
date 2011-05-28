@@ -21,10 +21,8 @@ public class GuardParser implements AnnotationParser {
     Guard g = (Guard) parameters.getAnnotation();
     String[] transitionNames = g.value();
     for (String name : transitionNames) {
-      log.debug("found guard for transition: "+name);
       FSM fsm = parameters.getFsm();
-      Method method = parameters.getMethod();
-      InvocationTarget target = new InvocationTarget(parameters);
+      InvocationTarget target = new InvocationTarget(parameters, Guard.class);
       if (name.equals("all")) {
         fsm.addGenericGuard(target);
         //generic guards should not be have their own transition or it will fail the FSM check since it is a guard

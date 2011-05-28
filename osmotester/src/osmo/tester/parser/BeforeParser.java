@@ -18,8 +18,7 @@ public class BeforeParser implements AnnotationParser {
   public String parse(ParserParameters parameters) {
     Before before = (Before) parameters.getAnnotation();
     Method method = parameters.getMethod();
-    log.debug("found @before method:" +method.getName());
-    parameters.getFsm().addBefore(new InvocationTarget(parameters));
+    parameters.getFsm().addBefore(new InvocationTarget(parameters, Before.class));
     return "";
   }
 }

@@ -16,8 +16,7 @@ public class EndConditionParser implements AnnotationParser {
   public String parse(ParserParameters parameters) {
     EndCondition ec = (EndCondition) parameters.getAnnotation();
     Method method = parameters.getMethod();
-    log.debug("found @EndCondition method:"+method.getName());
-    parameters.getFsm().addEndCondition(new InvocationTarget(parameters));
+    parameters.getFsm().addEndCondition(new InvocationTarget(parameters, EndCondition.class));
     return "";
   }
 }

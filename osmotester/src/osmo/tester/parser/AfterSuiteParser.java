@@ -18,8 +18,7 @@ public class AfterSuiteParser implements AnnotationParser {
   public String parse(ParserParameters parameters) {
     AfterSuite after = (AfterSuite) parameters.getAnnotation();
     Method method = parameters.getMethod();
-    log.debug("found @AfterSuite method:"+method.getName());
-    parameters.getFsm().addAfterSuite(new InvocationTarget(parameters));
+    parameters.getFsm().addAfterSuite(new InvocationTarget(parameters, AfterSuite.class));
     return "";
   }
 }
