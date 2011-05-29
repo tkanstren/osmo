@@ -1,4 +1,4 @@
-package osmo.tester.parser;
+package osmo.tester.testmodels;
 
 import osmo.tester.annotation.Guard;
 import osmo.tester.annotation.RequirementsField;
@@ -9,7 +9,7 @@ import osmo.tester.model.Requirements;
 /**
  * @author Teemu Kanstren
  */
-public class TestModel2 {
+public class EmptyTestModel2 {
   @RequirementsField
   private Requirements req1 = new Requirements();
   @RequirementsField

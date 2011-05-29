@@ -56,7 +56,11 @@ public class TestListener implements GenerationListener {
     steps.add("suite-end");
   }
 
-  public void validate() {
-    assertEquals(expected, steps);
+  public void validate(String msg) {
+    assertEquals(msg, expected, steps);
+  }
+
+  public Collection<String> getSteps() {
+    return steps;
   }
 }

@@ -86,4 +86,26 @@ public class TestSuite {
     }
     return current.getSteps().size();
   }
+
+  public boolean contains(FSMTransition transition) {
+    for (TestCase testCase : history) {
+      if (testContains(testCase, transition)) {
+        return true;
+      }
+    }
+    if (current != null && testContains(current, transition)) {
+      return true;
+    }
+    return false;
+  }
+
+  private boolean testContains(TestCase testCase, FSMTransition transition) {
+    List<TestStep> steps = testCase.getSteps();
+    for (TestStep step : steps) {
+      if (step.getTransition().equals(transition)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

@@ -6,6 +6,14 @@ import osmo.tester.log.Logger;
 import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
 import osmo.tester.model.Requirements;
+import osmo.tester.testmodels.PartialModel1;
+import osmo.tester.testmodels.PartialModel2;
+import osmo.tester.testmodels.EmptyTestModel1;
+import osmo.tester.testmodels.EmptyTestModel2;
+import osmo.tester.testmodels.EmptyTestModel3;
+import osmo.tester.testmodels.EmptyTestModel4;
+import osmo.tester.testmodels.EmptyTestModel5;
+import osmo.tester.testmodels.EmptyTestModel6;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,7 +34,7 @@ public class ParserTests {
   @Test
   public void testModel1() throws Exception {
     MainParser parser = new MainParser();
-    TestModel1 model = new TestModel1();
+    EmptyTestModel1 model = new EmptyTestModel1();
     FSM fsm = parser.parse(model);
     assertEquals("Number of @Before methods", 2, fsm.getBefores().size());
     assertEquals("Number of @BeforeSuite methods", 1, fsm.getBeforeSuites().size());
@@ -46,7 +54,7 @@ public class ParserTests {
   public void testModel2() {
     MainParser parser = new MainParser();
     try {
-      FSM fsm = parser.parse(new TestModel2());
+      FSM fsm = parser.parse(new EmptyTestModel2());
       fail("Should throw exception");
     } catch (Exception e) {
       String msg = e.getMessage();
@@ -61,7 +69,7 @@ public class ParserTests {
   public void testModel3() {
     MainParser parser = new MainParser();
     try {
-      FSM fsm = parser.parse(new TestModel3());
+      FSM fsm = parser.parse(new EmptyTestModel3());
       fail("Should throw exception");
     } catch (Exception e) {
       String msg = e.getMessage();
@@ -79,7 +87,7 @@ public class ParserTests {
   public void testModel4() {
     MainParser parser = new MainParser();
     try {
-      FSM fsm = parser.parse(new TestModel4());
+      FSM fsm = parser.parse(new EmptyTestModel4());
       fail("Should throw exception");
     } catch (Exception e) {
       //note that this exception checking will swallow real errors so it can be useful to print them..
@@ -98,7 +106,7 @@ public class ParserTests {
   public void testModel5() {
     MainParser parser = new MainParser();
     try {
-      FSM fsm = parser.parse(new TestModel5());
+      FSM fsm = parser.parse(new EmptyTestModel5());
       fail("Should throw exception");
     } catch (Exception e) {
       String msg = e.getMessage();
@@ -113,7 +121,7 @@ public class ParserTests {
   public void testModel6() {
     MainParser parser = new MainParser();
     try {
-      FSM fsm = parser.parse(new TestModel6());
+      FSM fsm = parser.parse(new EmptyTestModel6());
       fail("Should throw exception");
     } catch (Exception e) {
       String msg = e.getMessage();
@@ -130,8 +138,8 @@ public class ParserTests {
   public void testPartialModels() {
     MainParser parser = new MainParser();
     Requirements req = new Requirements();
-    PartialModel1 model1 = new PartialModel1(req);
-    PartialModel2 model2 = new PartialModel2(req);
+    PartialModel1 model1 = new PartialModel1(req, null);
+    PartialModel2 model2 = new PartialModel2(req, null);
     Collection<Object> models = new ArrayList<Object>();
     models.add(model1);
     models.add(model2);
@@ -141,9 +149,9 @@ public class ParserTests {
     assertEquals("Number of @After methods", 2, fsm.getAfters().size());
     assertEquals("Number of @AfterSuite methods", 1, fsm.getAfterSuites().size());
     //these also test for the correct number of guards
-    assertTransitionPresent(fsm, "hello", 0, 2);
-    assertTransitionPresent(fsm, "world", 3, 1);
-    assertTransitionPresent(fsm, "epixx", 2, 3);
+    assertTransitionPresent(fsm, "hello", 1, 2);
+    assertTransitionPresent(fsm, "world", 3, 2);
+    assertTransitionPresent(fsm, "epixx", 2, 2);
     assertEquals("Number of end conditions", 2, fsm.getEndConditions().size());
     assertNotNull("Should have TestLog set", model1.getHistory());
     assertNotNull("Should have TestLog set", model2.getHistory());

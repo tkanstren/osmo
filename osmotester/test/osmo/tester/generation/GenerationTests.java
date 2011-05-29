@@ -6,6 +6,13 @@ import org.junit.Test;
 import osmo.tester.OSMOTester;
 import osmo.tester.generator.strategy.LengthStrategy;
 import osmo.tester.model.Requirements;
+import osmo.tester.testmodels.PartialModel1;
+import osmo.tester.testmodels.PartialModel2;
+import osmo.tester.testmodels.ValidTestModel1;
+import osmo.tester.testmodels.ValidTestModel2;
+import osmo.tester.testmodels.ValidTestModel3;
+import osmo.tester.testmodels.ValidTestModel4;
+import osmo.tester.testmodels.ValidTestModel5;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -31,7 +38,7 @@ public class GenerationTests {
 
   @Test
   public void noEnabledTransition() {
-    osmo.addModelObject(new TestModel1());
+    osmo.addModelObject(new ValidTestModel1());
     LengthStrategy length3 = new LengthStrategy(3);
     LengthStrategy length1 = new LengthStrategy(1);
     osmo.setTestStrategy(length3);
@@ -48,7 +55,7 @@ public class GenerationTests {
   public void generateTestModel2() {
     ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
     PrintStream ps = new PrintStream(out);
-    osmo.addModelObject(new TestModel2(new Requirements(), ps));
+    osmo.addModelObject(new ValidTestModel2(new Requirements(), ps));
     LengthStrategy length3 = new LengthStrategy(3);
     LengthStrategy length1 = new LengthStrategy(1);
     osmo.setTestStrategy(length3);
@@ -63,7 +70,7 @@ public class GenerationTests {
   public void generateTestModel3() {
     ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
     PrintStream ps = new PrintStream(out);
-    osmo.addModelObject(new TestModel3(ps));
+    osmo.addModelObject(new ValidTestModel3(ps));
     LengthStrategy length3 = new LengthStrategy(3);
     LengthStrategy length1 = new LengthStrategy(1);
     osmo.setTestStrategy(length3);
@@ -78,7 +85,7 @@ public class GenerationTests {
   public void generateTestModel3Times4() {
     ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
     PrintStream ps = new PrintStream(out);
-    osmo.addModelObject(new TestModel3(ps));
+    osmo.addModelObject(new ValidTestModel3(ps));
     LengthStrategy length3 = new LengthStrategy(3);
     LengthStrategy length4 = new LengthStrategy(4);
     osmo.setTestStrategy(length3);
@@ -97,7 +104,7 @@ public class GenerationTests {
   public void generateTestModel4Times2() {
     ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
     PrintStream ps = new PrintStream(out);
-    osmo.addModelObject(new TestModel4(ps));
+    osmo.addModelObject(new ValidTestModel4(ps));
     LengthStrategy length3 = new LengthStrategy(3);
     LengthStrategy length2 = new LengthStrategy(2);
     osmo.setTestStrategy(length3);
@@ -114,7 +121,7 @@ public class GenerationTests {
   public void generateTestModel5Times2() {
     ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
     PrintStream ps = new PrintStream(out);
-    osmo.addModelObject(new TestModel5(ps));
+    osmo.addModelObject(new ValidTestModel5(ps));
     LengthStrategy length3 = new LengthStrategy(3);
     LengthStrategy length2 = new LengthStrategy(2);
     osmo.setTestStrategy(length3);

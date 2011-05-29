@@ -1,4 +1,4 @@
-package osmo.tester.parser;
+package osmo.tester.testmodels;
 
 import osmo.tester.annotation.EndCondition;
 import osmo.tester.annotation.Guard;
@@ -11,7 +11,7 @@ import osmo.tester.model.Requirements;
 /**
  * @author Teemu Kanstren
  */
-public class TestModel4 {
+public class EmptyTestModel4 {
   @RequirementsField
   private Requirements requirements = null;
   @TestSuiteField

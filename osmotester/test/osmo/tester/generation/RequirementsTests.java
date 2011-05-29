@@ -4,6 +4,7 @@ import org.junit.Test;
 import osmo.tester.OSMOTester;
 import osmo.tester.generator.strategy.LengthStrategy;
 import osmo.tester.model.Requirements;
+import osmo.tester.testmodels.ValidTestModel2;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -14,10 +15,10 @@ public class RequirementsTests {
   @Test
   public void fullCoverage() {
     Requirements req = new Requirements();
-    req.add(TestModel2.REQ_EPIX);
-    req.add(TestModel2.REQ_HELLO);
-    req.add(TestModel2.REQ_WORLD);
-    OSMOTester osmo = new OSMOTester(new TestModel2(req));
+    req.add(ValidTestModel2.REQ_EPIX);
+    req.add(ValidTestModel2.REQ_HELLO);
+    req.add(ValidTestModel2.REQ_WORLD);
+    OSMOTester osmo = new OSMOTester(new ValidTestModel2(req));
     osmo.setTestStrategy(new LengthStrategy(3));
     osmo.setSuiteStrategy(new LengthStrategy(1));
     osmo.generate();
@@ -29,8 +30,8 @@ public class RequirementsTests {
   @Test
   public void excessCoverage() {
     Requirements req = new Requirements();
-    req.add(TestModel2.REQ_EPIX);
-    OSMOTester osmo = new OSMOTester(new TestModel2(req));
+    req.add(ValidTestModel2.REQ_EPIX);
+    OSMOTester osmo = new OSMOTester(new ValidTestModel2(req));
     osmo.setTestStrategy(new LengthStrategy(3));
     osmo.setSuiteStrategy(new LengthStrategy(1));
     osmo.generate();
@@ -42,7 +43,7 @@ public class RequirementsTests {
   @Test
   public void fullExcessCoverage() {
     Requirements req = new Requirements();
-    OSMOTester osmo = new OSMOTester(new TestModel2(req));
+    OSMOTester osmo = new OSMOTester(new ValidTestModel2(req));
     osmo.setTestStrategy(new LengthStrategy(3));
     osmo.setSuiteStrategy(new LengthStrategy(1));
     osmo.generate();
@@ -54,11 +55,11 @@ public class RequirementsTests {
   @Test
   public void lackingCoverage() {
     Requirements req = new Requirements();
-    req.add(TestModel2.REQ_EPIX);
-    req.add(TestModel2.REQ_HELLO);
-    req.add(TestModel2.REQ_WORLD);
+    req.add(ValidTestModel2.REQ_EPIX);
+    req.add(ValidTestModel2.REQ_HELLO);
+    req.add(ValidTestModel2.REQ_WORLD);
     req.add("undefined");
-    OSMOTester osmo = new OSMOTester(new TestModel2(req));
+    OSMOTester osmo = new OSMOTester(new ValidTestModel2(req));
     osmo.setTestStrategy(new LengthStrategy(3));
     osmo.setSuiteStrategy(new LengthStrategy(1));
     osmo.generate();

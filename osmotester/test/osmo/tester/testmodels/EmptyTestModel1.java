@@ -1,8 +1,9 @@
-package osmo.tester.parser;
+package osmo.tester.testmodels;
 
 import osmo.tester.annotation.After;
 import osmo.tester.annotation.AfterSuite;
 import osmo.tester.annotation.Before;
+import osmo.tester.annotation.BeforeSuite;
 import osmo.tester.annotation.EndCondition;
 import osmo.tester.annotation.Guard;
 import osmo.tester.annotation.Oracle;
@@ -13,24 +14,22 @@ import osmo.tester.generator.testsuite.TestSuite;
 import osmo.tester.model.Requirements;
 
 /**
+ *
+ * 
  * @author Teemu Kanstren
  */
-public class PartialModel2 {
+public class EmptyTestModel1 {
   @RequirementsField
-  private final Requirements requirements;
+  private Requirements requirements = new Requirements();
   @TestSuiteField
   private TestSuite history = null;
-
-  public PartialModel2(Requirements requirements) {
-    this.requirements = requirements;
-  }
 
   public TestSuite getHistory() {
     return history;
   }
 
-  @AfterSuite
-  public void endAll() {
+  @Before
+  public void start1() {
 
   }
 
@@ -40,7 +39,17 @@ public class PartialModel2 {
   }
 
   @After
-  public void end2() {
+  public void end() {
+
+  }
+
+  @BeforeSuite
+  public void beforeAll() {
+
+  }
+
+  @AfterSuite
+  public void endAll() {
 
   }
 
@@ -49,22 +58,55 @@ public class PartialModel2 {
 
   }
 
+  @Transition("world")
+  public void epix() {
+
+  }
+
+  @Guard("world")
+  public boolean listCheck() {
+    return false;
+  }
+
   @Guard("world")
   public boolean listCheck2() {
     return false;
   }
 
-  @Transition("world")
-  public void epix() {
+  @Transition("epixx")
+  public void epixx() {
 
+  }
+
+  @Guard("epixx")
+  public boolean kitted() {
+    return false;
+  }
+
+  @Guard({"epixx", "world"})
+  public boolean gaagaa() {
+    return false;
   }
 
   @Oracle
   public void stateOracle() {
   }
 
+  @Oracle("epixx")
+  public void epixxOracle() {
+  }
+
+  @Oracle({"hello", "epixx"})
+  public void commonOracle() {
+  }
+
   @EndCondition
-  public boolean ec2() {
+  public boolean end1() {
+    return false;
+  }
+
+  @EndCondition
+  public boolean end2() {
     return false;
   }
 }

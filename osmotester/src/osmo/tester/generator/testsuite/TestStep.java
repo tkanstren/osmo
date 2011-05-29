@@ -50,4 +50,8 @@ public class TestStep {
     }
     return coveredRequirements;
   }
+
+  public FSMTransition getTransition() {
+    return transition;
+  }
 }

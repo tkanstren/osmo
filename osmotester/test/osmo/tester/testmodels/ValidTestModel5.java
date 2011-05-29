@@ -1,4 +1,4 @@
-package osmo.tester.generation;
+package osmo.tester.testmodels;
 
 import osmo.tester.annotation.Before;
 import osmo.tester.annotation.EndCondition;
@@ -15,7 +15,7 @@ import java.io.PrintStream;
  *
  * @author Teemu Kanstren
  */
-public class TestModel5 {
+public class ValidTestModel5 {
   @RequirementsField
   private final Requirements req = new Requirements();
   public static final String REQ_HELLO = "hello";
@@ -23,7 +23,7 @@ public class TestModel5 {
   public static final String REQ_EPIX = "epix";
   private final PrintStream out;
 
-  public TestModel5(PrintStream out) {
+  public ValidTestModel5(PrintStream out) {
     this.out = out;
   }
 

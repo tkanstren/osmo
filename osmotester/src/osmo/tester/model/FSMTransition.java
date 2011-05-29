@@ -53,4 +53,28 @@ public class FSMTransition {
   public Collection<InvocationTarget> getOracles() {
     return oracles;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    FSMTransition that = (FSMTransition) o;
+
+    if (guards != null ? !guards.equals(that.guards) : that.guards != null) return false;
+    if (name != null ? !name.equals(that.name) : that.name != null) return false;
+    if (oracles != null ? !oracles.equals(that.oracles) : that.oracles != null) return false;
+    if (transition != null ? !transition.equals(that.transition) : that.transition != null) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = name != null ? name.hashCode() : 0;
+    result = 31 * result + (guards != null ? guards.hashCode() : 0);
+    result = 31 * result + (transition != null ? transition.hashCode() : 0);
+    result = 31 * result + (oracles != null ? oracles.hashCode() : 0);
+    return result;
+  }
 }

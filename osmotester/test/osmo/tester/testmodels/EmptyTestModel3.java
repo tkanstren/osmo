@@ -1,4 +1,4 @@
-package osmo.tester.parser;
+package osmo.tester.testmodels;
 
 import osmo.tester.annotation.EndCondition;
 import osmo.tester.annotation.Guard;
@@ -10,7 +10,7 @@ import osmo.tester.annotation.Transition;
 /**
  * @author Teemu Kanstren
  */
-public class TestModel3 {
+public class EmptyTestModel3 {
   @RequirementsField
   private String requirements = null;
   @TestSuiteField

@@ -1,34 +1,53 @@
-package osmo.tester.generation;
+package osmo.tester.testmodels;
 
+import osmo.tester.annotation.After;
 import osmo.tester.annotation.Before;
+import osmo.tester.annotation.BeforeSuite;
+import osmo.tester.annotation.EndCondition;
 import osmo.tester.annotation.Guard;
 import osmo.tester.annotation.Oracle;
 import osmo.tester.annotation.RequirementsField;
+import osmo.tester.annotation.TestSuiteField;
 import osmo.tester.annotation.Transition;
+import osmo.tester.generator.testsuite.TestSuite;
 import osmo.tester.model.Requirements;
 
 import java.io.PrintStream;
 
 /**
- * A test model with requirements that can all be covered.
- *
  * @author Teemu Kanstren
  */
-public class TestModel3 {
+public class PartialModel1 {
   @RequirementsField
-  private final Requirements req = new Requirements();
+  private final Requirements req;
+  @TestSuiteField
+  private TestSuite history = null;
   public static final String REQ_HELLO = "hello";
   public static final String REQ_WORLD = "world";
   public static final String REQ_EPIX = "epix";
   private final PrintStream out;
 
-  public TestModel3(PrintStream out) {
+  public PartialModel1(Requirements req, PrintStream out) {
+    this.req = req;
     this.out = out;
+  }
+
+  public TestSuite getHistory() {
+    return history;
+  }
+
+  @BeforeSuite
+  public void beforeAll() {
+
   }
 
   @Before
   public void reset() {
     req.clearCoverage();
+  }
+
+  @After
+  public void end1() {
   }
 
   @Guard("hello")
@@ -43,25 +62,18 @@ public class TestModel3 {
   }
 
   @Guard("world")
-  public boolean worldCheck() {
-    return req.isCovered(REQ_HELLO) && !req.isCovered(REQ_WORLD) && !req.isCovered(REQ_EPIX);
+  public boolean excessCheck() {
+    return true;
   }
 
-  @Transition("world")
-  public void epix() {
-    req.covered(REQ_WORLD);
-    out.print(":world");
+  @Guard({"epixx", "world"})
+  public boolean gaagaa() {
+    return true;
   }
 
   @Guard("epixx")
   public boolean kitted() {
     return req.isCovered(REQ_WORLD);
-  }
-
-  @Transition("epixx")
-  public void epixx() {
-    req.covered(REQ_EPIX);
-    out.print(":epixx");
   }
 
   @Oracle("epixx")
@@ -72,5 +84,10 @@ public class TestModel3 {
   @Oracle
   public void stateCheck() {
     out.print(":gen_oracle");
+  }
+
+  @EndCondition
+  public boolean ec1() {
+    return false;
   }
 }
