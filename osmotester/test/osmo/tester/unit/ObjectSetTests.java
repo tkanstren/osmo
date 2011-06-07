@@ -60,4 +60,22 @@ public class ObjectSetTests {
     assertTrue("Should find \"three\" in the set of objects.", inv.evaluate("three"));
     assertFalse("Should not find \"four\" in the set of objects.", inv.evaluate("four"));
   }
+
+  @Test
+  public void addAndRemoveTest() {
+    ObjectSetInvariant<String> inv = new ObjectSetInvariant<String>(InputStrategy.ORDERED_LOOP);
+    inv.addOption("one");
+    inv.addOption("two");
+    inv.addOption("three");
+    assertEquals("one", inv.input());
+    assertEquals("two", inv.input());
+    inv.removeOption("one");
+    assertEquals("three", inv.input());
+    inv.addOption("four");
+    inv.addOption("five");
+    assertEquals("four", inv.input());
+    inv.removeOption("three");
+    assertEquals("five", inv.input());
+    assertEquals("two", inv.input());
+  }
 }

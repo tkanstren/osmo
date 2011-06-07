@@ -27,6 +27,10 @@ public class ObjectSetInvariant<T> {
   }
 
   public void removeOption(T option) {
+    int index = options.indexOf(option);
+    if (index <= next) {
+      next--;
+    }
     options.remove(option);
   }
 
