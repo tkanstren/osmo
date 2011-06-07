@@ -12,3 +12,4 @@
 -webbisivu jossa issue tracker jne
 -mallien jako osamalleihin ja mallien lisääminen tyyliin addModel()
 -generoinnin parametrien raportointi testikohtaisesti
+-tiloille pre- ja post-conditionit invariantti objekteilla. eli että voi oraclessa verrata tilan arvoja niihin mitkä oli ennen transitiota
