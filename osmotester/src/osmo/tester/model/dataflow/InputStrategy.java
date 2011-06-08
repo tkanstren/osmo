@@ -5,5 +5,6 @@ package osmo.tester.model.dataflow;
  */
 public enum InputStrategy {
   RANDOM,
+  OPTIMIZED_RANDOM,
   ORDERED_LOOP
 }

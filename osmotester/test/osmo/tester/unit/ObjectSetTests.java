@@ -1,5 +1,6 @@
 package osmo.tester.unit;
 
+import org.junit.Before;
 import org.junit.Test;
 import osmo.tester.model.dataflow.InputStrategy;
 import osmo.tester.model.dataflow.ObjectSetInvariant;
@@ -10,9 +11,19 @@ import static junit.framework.Assert.*;
  * @author Teemu Kanstren
  */
 public class ObjectSetTests {
+  private ObjectSetInvariant<String> inv = null;
+
+  @Before
+  public void setup() {
+    inv = new ObjectSetInvariant<String>();
+    inv.addOption("one");
+    inv.addOption("two");
+    inv.addOption("three");
+  }
+
   @Test
   public void orderedTest() {
-    ObjectSetInvariant<String> inv = new ObjectSetInvariant<String>(InputStrategy.ORDERED_LOOP);
+    inv.setStrategy(InputStrategy.ORDERED_LOOP);
     inv.addOption("one");
     inv.addOption("two");
     inv.addOption("three");
@@ -26,10 +37,8 @@ public class ObjectSetTests {
 
   @Test
   public void randomizedTest() {
-    ObjectSetInvariant<String> inv = new ObjectSetInvariant<String>();
-    inv.addOption("one");
-    inv.addOption("two");
-    inv.addOption("three");
+    //leaving this out also tests the default behaviour and expectations for that
+//    inv.setStrategy(InputStrategy.RANDOM);
     String v1 = inv.input();
     String v2 = inv.input();
     String v3 = inv.input();
@@ -50,11 +59,38 @@ public class ObjectSetTests {
   }
 
   @Test
+  public void optimizedRandomTest() {
+    String v6 = null;
+    boolean diff = false;
+    for (int i = 0 ; i < 10 ; i++) {
+      inv = new ObjectSetInvariant<String>();
+      inv.setStrategy(InputStrategy.OPTIMIZED_RANDOM);
+      inv.addOption("one");
+      inv.addOption("two");
+      inv.addOption("three");
+      inv.addOption("four");
+      inv.addOption("five");
+      String v1 = inv.input();
+      String v2 = inv.input();
+      String v3 = inv.input();
+      String v4 = inv.input();
+      String v5 = inv.input();
+      boolean match = v1.equals(v2) || v1.equals(v3) || v1.equals(v4) || v1.equals(v5);
+      match = match || v2.equals(v3) || v2.equals(v4) || v2.equals(v5) || v3.equals(v4) || v3.equals(v5) || v4.equals(v5);
+      assertFalse("Optimized random should generate random values but always different when uncovered options exist:"+v1+v2+v3+v4+v5, match);
+      String reference = v1+v2+v3+v4+v5;
+      if (v6 == null) {
+        v6 = reference;
+      } else if (!v6.equals(reference)) {
+        diff = true;
+      }
+    }
+    assertTrue("10 optimized random generations should produce different results.", diff);
+  }
+
+  @Test
   public void evaluationTest() {
-    ObjectSetInvariant<String> inv = new ObjectSetInvariant<String>(InputStrategy.ORDERED_LOOP);
-    inv.addOption("one");
-    inv.addOption("two");
-    inv.addOption("three");
+    inv.setStrategy(InputStrategy.ORDERED_LOOP);
     assertTrue("Should find \"one\" in the set of objects.", inv.evaluate("one"));
     assertTrue("Should find \"two\" in the set of objects.", inv.evaluate("two"));
     assertTrue("Should find \"three\" in the set of objects.", inv.evaluate("three"));
@@ -62,11 +98,8 @@ public class ObjectSetTests {
   }
 
   @Test
-  public void addAndRemoveTest() {
-    ObjectSetInvariant<String> inv = new ObjectSetInvariant<String>(InputStrategy.ORDERED_LOOP);
-    inv.addOption("one");
-    inv.addOption("two");
-    inv.addOption("three");
+  public void addAndRemoveOrderedTest() {
+    inv.setStrategy(InputStrategy.ORDERED_LOOP);
     assertEquals("one", inv.input());
     assertEquals("two", inv.input());
     inv.removeOption("one");
@@ -78,4 +111,5 @@ public class ObjectSetTests {
     assertEquals("five", inv.input());
     assertEquals("two", inv.input());
   }
+
 }

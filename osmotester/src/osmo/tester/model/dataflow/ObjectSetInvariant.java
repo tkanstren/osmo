@@ -1,6 +1,7 @@
 package osmo.tester.model.dataflow;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,11 +15,16 @@ public class ObjectSetInvariant<T> {
   private InputStrategy strategy = InputStrategy.RANDOM;
   //index for next item if using ORDERED_LOOP. Using this instead of iterator to allow modification of options in runtime
   private int next = 0;
+  private Collection<T> history = new ArrayList<T>();
 
   public ObjectSetInvariant() {
   }
 
   public ObjectSetInvariant(InputStrategy strategy) {
+    this.strategy = strategy;
+  }
+
+  public void setStrategy(InputStrategy strategy) {
     this.strategy = strategy;
   }
 
@@ -39,15 +45,43 @@ public class ObjectSetInvariant<T> {
   }
 
   public T input() {
-    if (options.size() == 0) {
+    List<T> currentOptions = new ArrayList<T>();
+    currentOptions.addAll(options);
+    if (currentOptions.size() == 0) {
       throw new IllegalStateException("No value to provide (add some options).");
     }
     if (strategy == InputStrategy.ORDERED_LOOP) {
-      if (next >= options.size()) {
+      if (next >= currentOptions.size()) {
         next = 0;
       }
-      return options.get(next++);
+      return currentOptions.get(next++);
     }
-    return oneOf(options);
+    //TODO:test this strategy
+    if (strategy == InputStrategy.OPTIMIZED_RANDOM) {
+      currentOptions.removeAll(history);
+      if (currentOptions.size() == 0) {
+        currentOptions = options;
+      }
+    }
+    //here we default to RANDOM
+    T input = oneOf(currentOptions);
+    history.add(input);
+    return input;
+  }
+
+  public int size() {
+    return options.size();
+  }
+
+  public Collection<T> getAll() {
+    return options;
+  }
+
+  @Override
+  public String toString() {
+    return "ObjectSetInvariant{" +
+            "strategy=" + strategy +
+            ", options=" + options +
+            '}';
   }
 }
