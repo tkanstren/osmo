@@ -2,11 +2,12 @@ package osmo.tester.model;
 
 import osmo.tester.log.Logger;
 import osmo.tester.parser.ParserParameters;
-import sun.rmi.runtime.Log;
 
 import java.lang.reflect.Method;
 
 /**
+ * A class used internally to represent a method to be invoked on a specific object.
+ *
  * @author Teemu Kanstren
  */
 public class InvocationTarget {
@@ -15,6 +16,7 @@ public class InvocationTarget {
   private final Object modelObject;
   /** The method to be invoked on the model object. */
   private final Method method;
+  /** The annotation name for the invoked method (from model annotations). Used for error reporting. */
   private final String type;
 
   public InvocationTarget(ParserParameters parameters, Class type) {

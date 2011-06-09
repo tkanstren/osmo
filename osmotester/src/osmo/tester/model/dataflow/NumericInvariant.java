@@ -5,23 +5,42 @@ import osmo.tester.log.Logger;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static osmo.tester.TestUtils.*;
+import static osmo.tester.TestUtils.oneOf;
 
 /**
+ * This invariant represents a set of numeric input domains.
+ * Each domain is represented as a separate partition with a minimum and maximum value.
+ * Input values are generated across the domains randomly and depending on the input-strategy the domain
+ * is chosen in a different way each time.
+ * Evaluation of values checks if the given value fits in any of the given domains.
+ *
  * @author Teemu Kanstren
  */
 public abstract class NumericInvariant<T extends Number> {
   private static final Logger log = new Logger(NumericInvariant.class);
+  /** The different partitions in the domain. */
   private ObjectSetInvariant<Partition> partitions = new ObjectSetInvariant<Partition>();
+  /** The strategy for input data generation. */
   private InputStrategy strategy = InputStrategy.RANDOM;
+  /** Keeps a history of all the data values created as input from this invariant. */
   protected Collection<T> history = new ArrayList<T>();
 
+  /**
+   * Sets the input generation strategy.
+   *
+   * @param strategy The new strategy.
+   */
   public void setStrategy(InputStrategy strategy) {
     this.strategy = strategy;
     partitions.setStrategy(strategy);
   }
 
-  //test for update of main partition based on added partitions
+  /**
+   * Adds a new data partition (domain).
+   *
+   * @param min Lower bound (minimum value) of the partition.
+   * @param max Upper bound (maximum value) of the partition.
+   */
   public void addPartition(T min, T max) {
     log.debug("Adding partition min("+min+") max("+max+")");
     if (min.doubleValue() > max.doubleValue()) {
@@ -30,13 +49,24 @@ public abstract class NumericInvariant<T extends Number> {
     partitions.addOption(new Partition(min, max));
   }
 
+  /**
+   * Removes the given partition. Identification is based on matching boundary values, if none are found,
+   * nothing is done.
+   *
+   * @param min Lower bound (minimum value) of the partition.
+   * @param max Upper bound (maximum value) of the partition.
+   */
   public void removePartition(T min, T max) {
     log.debug("Removing partition min("+min+") max("+max+")");
     partitions.removeOption(new Partition(min, max));
   }
 
-  //TODO: test with 0 partitions
-  public Partition nextInterval() {
+  /**
+   * Provides the next partition (domain) to generate data for, according to the chosen input-strategy.
+   *
+   * @return The partition to generate data from.
+   */
+  public Partition nextPartition() {
     if (strategy != InputStrategy.OPTIMIZED_RANDOM) {
       Partition partition = partitions.input();
       log.debug("Next interval "+partition);
@@ -45,6 +75,11 @@ public abstract class NumericInvariant<T extends Number> {
     return optimizedRandomPartition();
   }
 
+  /**
+   * Chooses a partition based on the OPTIMIZED_RANDOM input strategy.
+   *
+   * @return The chosen partition.
+   */
   private Partition optimizedRandomPartition() {
     log.debug("Optimized random partition choice start");
     Collection<Partition> options = partitions.getAll();
@@ -73,6 +108,13 @@ public abstract class NumericInvariant<T extends Number> {
     return oneOf(currentOptions);
   }
 
+  /**
+   * Calculates the coverage for the given partition. Coverage is measured in terms of how many values have
+   * been generated for the given partition.
+   *
+   * @param partition The partition to check the coverage for.
+   * @return The number of values generated so far for the given partition.
+   */
   private int coverageFor(Partition partition) {
     int count = 0;
     for (Number value : history) {
@@ -83,12 +125,20 @@ public abstract class NumericInvariant<T extends Number> {
     return count;
   }
 
+  /**
+   * Validates that this invariant makes sense (has partitions defined etc.).
+   */
   protected void validate() {
     if (partitions.size() == 0) {
       throw new IllegalStateException("No partitions defined. Add some to use this for something.");
     }
   }
 
+  /**
+   * Subclasses should implement this to provide a new input value.
+   *
+   * @return Generated input value.
+   */
   public abstract T input();
 /*
   public int nextI() {
@@ -127,6 +177,13 @@ public abstract class NumericInvariant<T extends Number> {
     return value;
   }
 */
+
+  /**
+   * Evaluates the given value to see if it fits into the defined set of partitions (domains).
+   *
+   * @param value The value to check.
+   * @return True if the value fits in the defined partitions, false otherwise.
+   */
   public boolean evaluate(T value) {
     Collection<Partition> partitions = this.partitions.getAll();
     log.debug("Evaluating value:"+value);

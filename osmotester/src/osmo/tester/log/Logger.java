@@ -35,10 +35,11 @@ public class Logger {
 
   private void init(String name) {
     logger = java.util.logging.Logger.getLogger(name);
-    Level level = Level.OFF;
-    if (debug) {
-      level = Level.ALL;
+    if (!debug) {
+      logger.setLevel(Level.OFF);
+      return;
     }
+    Level level = Level.ALL;
     logger.setLevel(level);
     LogHandler console = new LogHandler();
     console.setFormatter(new LogFormatter());

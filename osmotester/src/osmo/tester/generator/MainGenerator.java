@@ -29,6 +29,7 @@ public class MainGenerator {
   private ExitStrategy suiteStrategy;
   /** Defines when test case generation should be stopped. Invoked between each test step. */
   private ExitStrategy testStrategy;
+  /** The list of listeners to be notified of new events as generation progresses. */
   private GenerationListenerList listeners;
 
   /**

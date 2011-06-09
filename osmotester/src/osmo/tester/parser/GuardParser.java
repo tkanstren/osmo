@@ -6,8 +6,6 @@ import osmo.tester.model.FSM;
 import osmo.tester.model.FSMTransition;
 import osmo.tester.model.InvocationTarget;
 
-import java.lang.reflect.Method;
-
 /**
  * Parses {@link Guard} annotations from the given model object.
  * 

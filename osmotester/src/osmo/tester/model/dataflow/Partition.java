@@ -1,7 +1,5 @@
 package osmo.tester.model.dataflow;
 
-import java.util.Collection;
-
 /**
  * @author Teemu Kanstren
  */

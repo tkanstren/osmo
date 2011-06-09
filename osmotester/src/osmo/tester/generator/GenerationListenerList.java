@@ -1,16 +1,22 @@
 package osmo.tester.generator;
 
-import osmo.tester.generator.GenerationListener;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
+ * Maintains a list of {@link GenerationListener} implementations to be called.
+ *
  * @author Teemu Kanstren
  */
 public class GenerationListenerList implements GenerationListener {
+  /** The list of listeners to be invoked. */
   private Collection<GenerationListener> listeners = new ArrayList<GenerationListener>();
 
+  /**
+   * Add a new listener to be invoked.
+   *
+   * @param listener The listener to add.
+   */
   public void addListener(GenerationListener listener) {
     listeners.add(listener);
   }

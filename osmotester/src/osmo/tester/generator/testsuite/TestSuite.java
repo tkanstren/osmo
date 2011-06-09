@@ -66,10 +66,20 @@ public class TestSuite {
     return count;
   }
 
+  /**
+   * Access to the test case being currently generated.
+   *
+   * @return The current test case.
+   */
   public TestCase getCurrent() {
     return current;
   }
 
+  /**
+   * Access to the overall test case generation history. Excludes the currently generated test case.
+   *
+   * @return The history access object.
+   */
   public List<TestCase> getHistory() {
     return history;
   }
@@ -87,6 +97,12 @@ public class TestSuite {
     return current.getSteps().size();
   }
 
+  /**
+   * Checks if the given transition is present in any of the previously generated test cases (history+current test case).
+   *
+   * @param transition The transition to check.
+   * @return True if transition is present, false if not.
+   */
   public boolean contains(FSMTransition transition) {
     for (TestCase testCase : history) {
       if (testContains(testCase, transition)) {
@@ -99,6 +115,13 @@ public class TestSuite {
     return false;
   }
 
+  /**
+   * Checks if the given test case contains the given transition.
+   *
+   * @param testCase The test case to check.
+   * @param transition The transition to check.
+   * @return True if the given transition is found in the given test case, otherwise false.
+   */
   private boolean testContains(TestCase testCase, FSMTransition transition) {
     List<TestStep> steps = testCase.getSteps();
     for (TestStep step : steps) {
