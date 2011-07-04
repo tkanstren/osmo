@@ -33,7 +33,7 @@ public class OptimizedRandomTests {
   }
 
   @Test
-  public void testModel2() {
+  public void testModel6Length4() {
     listener.addExpected("suite-start", "start", "t:t1", "t:t3", "t:t4", "t:t2", "end", "suite-end");
     osmo.addModelObject(new ValidTestModel6());
     LengthStrategy length4 = new LengthStrategy(4);
@@ -48,6 +48,29 @@ public class OptimizedRandomTests {
     testSetup();
     osmo.addModelObject(new ValidTestModel6());
     osmo.setTestStrategy(length4);
+    osmo.setSuiteStrategy(length1);
+    osmo.setAlgorithm(new RandomAlgorithm());
+    osmo.generate();
+    Collection<String> random = listener.getSteps();
+    assertFalse("Optimized generator should be different from random", random.equals(optimized));
+  }
+
+  @Test
+  public void testModel6Length15() {
+    listener.addExpected("suite-start", "start", "t:t1", "t:t2", "t:t3", "t:t4", "t:t1", "t:t2", "t:t3", "t:t4", "t:t4", "t:t2", "t:t3", "t:t1", "t:t1", "t:t4", "t:t3", "end", "suite-end");
+    osmo.addModelObject(new ValidTestModel6());
+    LengthStrategy length15 = new LengthStrategy(15);
+    LengthStrategy length1 = new LengthStrategy(1);
+    osmo.setTestStrategy(length15);
+    osmo.setSuiteStrategy(length1);
+    osmo.setAlgorithm(new OptimizedRandomAlgorithm());
+    osmo.generate();
+    listener.validate("Optimized random generator steps");
+    Collection<String> optimized = listener.getSteps();
+
+    testSetup();
+    osmo.addModelObject(new ValidTestModel6());
+    osmo.setTestStrategy(length15);
     osmo.setSuiteStrategy(length1);
     osmo.setAlgorithm(new RandomAlgorithm());
     osmo.generate();

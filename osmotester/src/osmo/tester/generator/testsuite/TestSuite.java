@@ -84,6 +84,13 @@ public class TestSuite {
     return history;
   }
 
+  public List<TestCase> getAll() {
+    List<TestCase> all = new ArrayList<TestCase>(history.size()+1);
+    all.addAll(history);
+    all.add(current);
+    return all;
+  }
+
   /**
    * Gives the number of test steps in the current test case.
    *
